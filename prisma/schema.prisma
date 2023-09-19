@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url = env("DATABASE_URL")
+}
+
+model Transaction {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  date DateTime
+  amount Int
+  balance Int
+  kind String
+  content String
+  categoryId Int?
+  category Category? @relation(fields: [categoryId], references: [id])
+  memo String
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String @unique
+  color String
+  icon String
+  Transaction Transaction[]
+}
