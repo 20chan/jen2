@@ -1,7 +1,9 @@
-import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import localFont from 'next/font/local';
+import Link from 'next/link';
+import AuthProvider from './providers/AuthProvider';
+import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -44,13 +46,25 @@ export default function RootLayout({
     <html lang="en">
       <body className={mono.className}>
         <div className='sticky top-0 bg-half-key p-4 py-1 flex justify-center items-stretch'>
-          <div className='max-w-4xl flex-1'>
+          <div className='max-w-4xl'>
             <div className='text-xl font-bold'>
               <span>Jen</span><span className='text-half-red'>2</span>
             </div>
           </div>
+          <div className='flex-1'>
+            <Link href='/dashboard'>
+              <div className='text-xl font-bold'>
+                Dashboard
+              </div>
+            </Link>
+          </div>
+          <div>
+            <Link href='/api/auth/signin'>Login</Link>
+          </div>
         </div>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
