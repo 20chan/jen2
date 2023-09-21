@@ -17,6 +17,7 @@
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
     "next": "13.5.1",
+    "next-auth": "^4.23.1",
     "postcss": "8.4.30",
     "prisma": "^5.3.1",
     "react": "18.2.0",
@@ -25,7 +26,7 @@
     "typescript": "5.2.2"
   },
   "devDependencies": {
-    "xlsx-populate": "^1.21.0",
-    "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git"
+    "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
+    "xlsx-populate": "^1.21.0"
   }
 }
