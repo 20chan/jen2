@@ -25,7 +25,7 @@ const mono = localFont({
       style: 'semibold',
     },
   ],
-  display: 'swap',
+  display: 'block',
   variable: '--font-mono',
 })
 
@@ -46,7 +46,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={mono.className}>
         <div className='sticky top-0 bg-half-key p-4 py-1 flex justify-center items-stretch'>
-          <div className='max-w-4xl'>
+          <div className='max-w-4xl mr-2'>
             <div className='text-xl font-bold'>
               <span>Jen</span><span className='text-half-red'>2</span>
             </div>

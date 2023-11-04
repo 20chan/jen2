@@ -70,6 +70,9 @@ const config: Config = {
       },
     },
   },
+  safelist: [
+    { pattern: /^text-+/ },
+  ],
   plugins: [],
 }
 export default config
