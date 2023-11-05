@@ -1,6 +1,7 @@
 import { Transaction } from '@prisma/client';
 
 export type CategoryWrapped = {
+  id: number;
   name: string;
   color: string;
   label: string;

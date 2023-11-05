@@ -13,7 +13,7 @@ export default async function TransactionListPage(props: NextProps) {
   return (
     <div className='flex flex-row'>
       <div>
-        <TransactionTable transactions={transactions} categories={categories} scanFor={scanFor} />
+        <TransactionTable transactions={[...transactions].slice(0, 100)} categories={categories} scanFor={scanFor} />
       </div>
       <div className='ml-4 border-l border-l-half-dark-white/50 px-4'>
         <CategoryList categories={categories} scanFor={scanFor} />

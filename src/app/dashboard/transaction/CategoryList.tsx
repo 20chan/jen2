@@ -3,6 +3,7 @@ import { CreateCategoryForm } from './CreateCategoryForm';
 import { CategoryWrapped } from '@/lib/utils';
 import { scanAndAssignCategories } from '@/lib/db/category';
 import { revalidatePath } from 'next/cache';
+import { CategoryLabel } from './CategoryLabel';
 
 interface CategoryListProps {
   categories: CategoryWrapped[];
@@ -31,9 +32,7 @@ export function CategoryList({
                 {x.name}
               </div>
               <span className='text-sm'>
-                <span style={{ padding: '0.125rem', backgroundColor: `${x.color}55` }}>
-                  {x.label}
-                </span>
+                <CategoryLabel category={x} />
               </span>
             </div>
 

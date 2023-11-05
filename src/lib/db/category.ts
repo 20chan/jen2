@@ -50,4 +50,46 @@ export const scanAndAssignCategories = async (categoryName: string) => {
       }
     }
   });
-}
+};
+
+export const assignCategories = async (categoryId: number, transactionId: number, manuallyAssigned: boolean) => {
+  return await client.category.update({
+    where: {
+      id: categoryId,
+    },
+    data: {
+      Transaction: {
+        connectOrCreate: {
+          create: {
+            manuallyAssigned,
+            transactionId,
+          },
+          where: {
+            transactionId_categoryId: {
+              transactionId,
+              categoryId,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
+export const unassignCategories = async (categoryId: number, transactionId: number) => {
+  return await client.category.update({
+    where: {
+      id: categoryId,
+    },
+    data: {
+      Transaction: {
+        disconnect: {
+          transactionId_categoryId: {
+            transactionId,
+            categoryId,
+          },
+        },
+      },
+    },
+  });
+};

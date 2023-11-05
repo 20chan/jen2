@@ -8,6 +8,7 @@ import { CategoryWrapped, CategoryRules, RuleKeys, presetColors } from '@/lib/ut
 export function CreateCategoryForm() {
   const [show, setShow] = useState(false);
   const [input, setInput] = useState<CategoryWrapped>({
+    id: -1,
     name: '',
     color: '#fff',
     label: '',
