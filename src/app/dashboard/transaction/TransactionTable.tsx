@@ -35,7 +35,10 @@ export function TransactionTable({
             <div className='text-center'>Uncategorized</div>
           )}
           {x.getValue()?.map(category => (
-            <div key={category.categoryId}>
+            <div key={category.categoryId} style={{
+              display: 'inline-block',
+              backgroundColor: `${category.category.color}55`,
+            }}>
               {category.category.label}
             </div>
           ))}

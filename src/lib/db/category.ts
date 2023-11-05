@@ -29,7 +29,7 @@ export const scanAndAssignCategories = async (categoryName: string) => {
     transactionIds.push(transaction.id);
   }
 
-  await client.category.update({
+  return await client.category.update({
     where: {
       id: category.id,
     },

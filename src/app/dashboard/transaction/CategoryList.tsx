@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { CreateCategoryForm } from './CreateCategoryForm';
 import { CategoryWrapped } from '@/lib/utils';
 import { scanAndAssignCategories } from '@/lib/db/category';
+import { revalidatePath } from 'next/cache';
 
 interface CategoryListProps {
   categories: CategoryWrapped[];
@@ -17,6 +18,7 @@ export function CategoryList({
 
     const categoryName = formData.get('categoryName')?.toString() ?? '';
     await scanAndAssignCategories(categoryName);
+    revalidatePath('/dashboard/transaction');
   };
 
   return (
