@@ -51,9 +51,11 @@ export function TransactionTable({
           {x.getValue()?.length === 0 && (
             <div className='text-center'>Uncategorized</div>
           )}
-          {x.getValue()?.map(category => (
-            <CategoryLabel key={category.categoryId} category={category.category} />
-          ))}
+          <div className='flex flex-row gap-1'>
+            {x.getValue()?.map(category => (
+              <CategoryLabel key={category.categoryId} category={category.category} />
+            ))}
+          </div>
         </div>
       ),
     }),
