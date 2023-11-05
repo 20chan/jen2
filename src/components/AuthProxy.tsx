@@ -2,14 +2,16 @@
 
 import { useSession } from 'next-auth/react';
 
-export function AuthProxy({ children }: { children: React.ReactNode }) {
+export function AuthProxy({ children, fallback }: { children: React.ReactNode, fallback?: React.ReactNode }) {
   const { data: session } = useSession();
 
   if (!session) {
     return (
-      <div>
-        NOT AUTHENTICATED
-      </div>
+      fallback ?? (
+        <div>
+          NOT AUTHENTICATED
+        </div>
+      )
     )
   }
 

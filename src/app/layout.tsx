@@ -4,6 +4,7 @@ import localFont from 'next/font/local';
 import Link from 'next/link';
 import AuthProvider from './providers/AuthProvider';
 import './globals.css'
+import { AuthProxy } from '@/components/AuthProxy';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -45,24 +46,29 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={mono.className}>
-        <div className='sticky top-0 bg-half-key p-4 py-1 flex justify-center items-stretch'>
-          <div className='max-w-4xl mr-2'>
-            <div className='text-xl font-bold'>
-              <span>Jen</span><span className='text-half-red'>2</span>
+        <AuthProvider>
+          <div className='sticky top-0 bg-half-key p-4 py-1 flex justify-center items-stretch'>
+            <div className='max-w-4xl mr-4'>
+              <div className='text-xl font-bold'>
+                <span>Jen</span><span className='text-half-red'>2</span>
+              </div>
+            </div>
+            <div className='flex-1'>
+              <Link href='/dashboard'>
+                <div className='text-xl font-bold'>
+                  Dashboard
+                </div>
+              </Link>
+            </div>
+            <div>
+              <AuthProxy fallback={<Link href='/api/auth/signin'>Login</Link>}>
+                <Link href='/api/auth/signout'>
+                  Logout
+                </Link>
+              </AuthProxy>
+
             </div>
           </div>
-          <div className='flex-1'>
-            <Link href='/dashboard'>
-              <div className='text-xl font-bold'>
-                Dashboard
-              </div>
-            </Link>
-          </div>
-          <div>
-            <Link href='/api/auth/signin'>Login</Link>
-          </div>
-        </div>
-        <AuthProvider>
           {children}
         </AuthProvider>
       </body>
