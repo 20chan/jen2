@@ -16,15 +16,28 @@ model Transaction {
   balance Int
   kind String
   content String
-  categoryId Int?
-  category Category? @relation(fields: [categoryId], references: [id])
+  categories CategoriesOnTransaction[]
   memo String
 }
 
 model Category {
   id Int @id @default(autoincrement())
   name String @unique
+  label String
   color String
-  icon String
-  Transaction Transaction[]
+  Transaction CategoriesOnTransaction[]
+
+  // Array<{ keys: string[]; values: string[] }
+  rulesSerialized String
+}
+
+model CategoriesOnTransaction {
+  transactionId Int
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+  categoryId Int
+  category Category @relation(fields: [categoryId], references: [id])
+  assignedAt DateTime @default(now())
+  manuallyAssigned Boolean @default(false)
+
+  @@id([transactionId, categoryId])
 }

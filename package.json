@@ -27,6 +27,7 @@
     "postcss": "8.4.30",
     "prisma": "^5.3.1",
     "react": "18.2.0",
+    "react-color": "^2.19.3",
     "react-dom": "18.2.0",
     "remeda": "^1.29.0",
     "tailwindcss": "3.3.3",
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "@types/parse-color": "^1.0.2",
+    "@types/react-color": "^3.0.9",
     "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
     "xlsx-populate": "^1.21.0"
   }
