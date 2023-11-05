@@ -9,21 +9,17 @@ const tabs = [
         path: '/',
       },
       {
-        label: 'Summary',
-        path: '/summary',
+        label: 'Reports',
+        path: '/report',
       },
     ],
   },
   {
-    label: 'transactions',
+    label: 'data',
     groups: [
       {
-        label: 'list',
-        path: '/transactions',
-      },
-      {
-        label: 'edit',
-        path: '/edit-transaction',
+        label: 'transactions',
+        path: '/transaction',
       },
     ],
   },
@@ -46,12 +42,12 @@ export default function DashboardLayout({
           {
             tabs.map(({ label, groups }) => (
               <div key={label} className='flex flex-col py-2'>
-                <div className='font-bold uppercase'>
+                <div className='font-bold uppercase text-half-white/70'>
                   # {label}
                 </div>
                 {
                   groups.map(({ label, path }) => (
-                    <Link key={label} href={`/dashboard/${path}`} className='ml-2 py-0.5'>
+                    <Link key={label} href={`/dashboard/${path}`} className='ml-2 py-0.5 text-half-white/70'>
                       - {label}
                     </Link>
                   ))
@@ -62,7 +58,9 @@ export default function DashboardLayout({
         </div>
       </div>
 
-      <div>{children}</div>
+      <div className='min-h-screen p-12'>
+        {children}
+      </div>
     </main>
   );
 }

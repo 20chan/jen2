@@ -1,4 +1,4 @@
-const units = [
+const UNITS = [
   '',
   '만',
   '억',
@@ -7,7 +7,7 @@ const units = [
 export function formatCurrency(value: number): string {
   let x = value;
 
-
+  const units = [...UNITS];
   const result = [];
   while (x > 0) {
     const unit = units.shift();
