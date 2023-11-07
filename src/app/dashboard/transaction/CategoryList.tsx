@@ -23,7 +23,7 @@ export function CategoryList({
   };
 
   return (
-    <div>
+    <div className='flex flex-col gap-2'>
       {
         categories.map(x => (
           <div key={x.name}>
