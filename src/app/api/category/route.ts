@@ -1,6 +1,6 @@
 import { archiveCategory, createCategory, updateCategory } from '@/lib/db/category';
 import { CategoryWrapped } from '@/lib/utils';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 
 async function POST(request: Request) {
   const input = await request.json() as CategoryWrapped;
@@ -39,7 +39,7 @@ async function DELETE(request: Request) {
 }
 
 function revalidateCategories() {
-  revalidatePath('/dashboard/transaction');
+  revalidateTag('categories');
 }
 
 export {

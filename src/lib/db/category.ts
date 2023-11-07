@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache';
 import { client } from '../prisma'
 import {
   CategoryRule,
@@ -8,14 +9,16 @@ import {
   convertRawCategoryRulesToCategoryRules,
 } from '../utils';
 
-export const fetchCategoriesWrapped = async (): Promise<CategoryWrapped[]> => {
+export const fetchCategoriesWrapped = unstable_cache(async (): Promise<CategoryWrapped[]> => {
   const categories = await client.category.findMany();
 
   return categories.map(x => ({
     ...x,
     rules: convertRawCategoryRulesToCategoryRules(JSON.parse(x.rulesSerialized)),
   }));
-}
+}, undefined, {
+  tags: ['categories'],
+});
 
 export const scanAndAssignCategories = async (categoryName: string) => {
   const category = await client.category.findUniqueOrThrow({

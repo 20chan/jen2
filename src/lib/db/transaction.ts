@@ -1,5 +1,6 @@
 import { CategoriesOnTransaction, Category, Transaction } from '@prisma/client';
 import { client } from '../prisma';
+import { unstable_cache } from 'next/cache';
 
 export type CategoriesOnTransactionWithCategory = {
   categoryId: number;
@@ -12,7 +13,7 @@ export type TransactionWithCategories = Transaction & {
   categories: CategoriesOnTransactionWithCategory[];
 }
 
-export const fetchTransactionsWithCategories = async () => {
+export const fetchTransactionsWithCategories = unstable_cache(async () => {
   const transactions: TransactionWithCategories[] = await client.transaction.findMany({
     orderBy: {
       date: 'desc',
@@ -27,4 +28,6 @@ export const fetchTransactionsWithCategories = async () => {
   });
 
   return transactions;
-}
+}, undefined, {
+  tags: ['transactions', 'categories'],
+});
