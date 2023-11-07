@@ -20,10 +20,10 @@ export const fetchCategoriesWrapped = unstable_cache(async (): Promise<CategoryW
   tags: ['categories'],
 });
 
-export const scanAndAssignCategories = async (categoryName: string) => {
+export const scanAndAssignCategories = async (categoryId: number) => {
   const category = await client.category.findUniqueOrThrow({
     where: {
-      name: categoryName,
+      id: categoryId,
     },
   });
 

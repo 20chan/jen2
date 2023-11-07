@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { CreateOrEditCategoryForm } from './CreateOrEditCategoryForm';
 import { CategoryWrapped } from '@/lib/utils';
 import { scanAndAssignCategories } from '@/lib/db/category';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import { CategoryLabel } from './CategoryLabel';
 import { TransactionListPageContext } from './TransactionListPageContext';
 import { CategoryParams } from '@/lib/params';
@@ -19,9 +19,18 @@ export function CategoryList({
   const applyScanned = async (formData: FormData) => {
     'use server';
 
-    const categoryName = formData.get('categoryName')?.toString() ?? '';
-    await scanAndAssignCategories(categoryName);
-    revalidatePath('/dashboard/transaction');
+    const idRaw = formData.get('id')?.toString();
+    if (idRaw === undefined) {
+      return;
+    }
+
+    const categoryId = parseInt(idRaw);
+    if (isNaN(categoryId)) {
+      return;
+    }
+
+    await scanAndAssignCategories(categoryId);
+    revalidateTag('categories');
   };
 
   return (
