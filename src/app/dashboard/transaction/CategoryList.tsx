@@ -5,7 +5,7 @@ import { scanAndAssignCategories } from '@/lib/db/category';
 import { revalidatePath } from 'next/cache';
 import { CategoryLabel } from './CategoryLabel';
 import { TransactionListPageContext } from './TransactionListPageContext';
-import { NextSearchParams } from '@/lib/NextProps';
+import { CategoryParams } from '@/lib/params';
 
 type CategoryListProps = {
   categories: CategoryWrapped[];
@@ -73,7 +73,7 @@ export function CategoryList({
                     <input type='submit' className='block w-full text-center bg-half-dark-red/60 text-sm uppercase cursor-pointer' value='apply' />
                   </form>
                 ) : (
-                  <Link href={`/dashboard/transaction?${NextSearchParams.merge(context.props.searchParams, { scan: x.id })}`} className='block w-full text-center bg-half-dark-yellow/60 text-sm uppercase'>
+                  <Link href={`/dashboard/transaction?${CategoryParams.merge(context.props.searchParams, { scan: x.id })}`} className='block w-full text-center bg-half-dark-yellow/60 text-sm uppercase'>
                     test
                   </Link>
                 )

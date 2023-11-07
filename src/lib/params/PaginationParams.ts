@@ -16,4 +16,8 @@ export namespace PaginationParams {
   export const parse = (props: NextProps): PaginationParams => {
     return NextSearchParams.parse(props.searchParams, schema, defaultValue);
   };
+
+  export const merge = (searchParams: NextSearchParams, params: Partial<PaginationParams>): string => {
+    return NextSearchParams.merge(searchParams, params);
+  }
 }
