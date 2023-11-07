@@ -56,6 +56,18 @@ export function convertRawCategoryRuleToCategoryRule(
   return { pairs };
 }
 
+export function convertCategoryRulesToRawCategoryRules(
+  categoryRules: CategoryRules,
+): RawCategoryRules {
+  return categoryRules.map(convertCategoryRuleToRawCategoryRule);
+}
+
+export function convertRawCategoryRulesToCategoryRules(
+  rawCategoryRules: RawCategoryRules,
+): CategoryRules {
+  return rawCategoryRules.map(convertRawCategoryRuleToCategoryRule);
+}
+
 export function checkRules(rules: CategoryRules, transaction: Transaction): boolean {
   for (const rule of rules) {
     if (checkRule(rule, transaction)) {

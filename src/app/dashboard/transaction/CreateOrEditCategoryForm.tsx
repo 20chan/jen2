@@ -5,9 +5,13 @@ import { useState } from 'react';
 import { SketchPicker } from 'react-color';
 import { CategoryWrapped, CategoryRules, RuleKeys, presetColors } from '@/lib/utils';
 
-export function CreateCategoryForm() {
+interface CreateOrEditCategoryFormProps {
+  category?: CategoryWrapped;
+}
+
+export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormProps) {
   const [show, setShow] = useState(false);
-  const [input, setInput] = useState<CategoryWrapped>({
+  const [input, setInput] = useState<CategoryWrapped>(category ?? {
     id: -1,
     name: '',
     color: '#fff',
@@ -22,11 +26,20 @@ export function CreateCategoryForm() {
 
   const plusButtonCss = 'inline-block px-10 bg-half-dark-green/20 hover:bg-half-dark-green/50';
 
-  const requestCreate = async () => {
-    const res = await fetch('/api/category', {
-      method: 'POST',
-      body: JSON.stringify(input),
-    });
+  const request = async () => {
+    if (input.id === -1) {
+      // create
+      const res = await fetch('/api/category', {
+        method: 'POST',
+        body: JSON.stringify(input),
+      });
+    } else {
+      // edit
+      const res = await fetch('/api/category', {
+        method: 'PUT',
+        body: JSON.stringify(input),
+      });
+    }
   };
 
   return (
@@ -153,7 +166,7 @@ export function CreateCategoryForm() {
             </div>
 
             <div>
-              <button className='w-full bg-half-dark-green/40 hover:bg-half-dark-green/70 py-1' onClick={requestCreate}>
+              <button className='w-full bg-half-dark-green/40 hover:bg-half-dark-green/70 py-1' onClick={request}>
                 Create
               </button>
             </div>

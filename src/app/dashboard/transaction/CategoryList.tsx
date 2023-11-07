@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import { CreateCategoryForm } from './CreateCategoryForm';
+import { CreateOrEditCategoryForm } from './CreateOrEditCategoryForm';
 import { CategoryWrapped } from '@/lib/utils';
 import { scanAndAssignCategories } from '@/lib/db/category';
 import { revalidatePath } from 'next/cache';
 import { CategoryLabel } from './CategoryLabel';
 
-interface CategoryListProps {
+type CategoryListProps = {
   categories: CategoryWrapped[];
   scanFor?: string;
 }
@@ -80,7 +80,7 @@ export function CategoryList({
       }
 
       <div className='mt-10'>
-        <CreateCategoryForm />
+        <CreateOrEditCategoryForm />
       </div>
     </div>
   )

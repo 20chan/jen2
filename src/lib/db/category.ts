@@ -1,12 +1,12 @@
 import { client } from '../prisma'
-import { CategoryRule, CategoryWrapped, checkRules, convertRawCategoryRuleToCategoryRule } from '../utils';
+import { CategoryRule, CategoryWrapped, checkRules, convertRawCategoryRuleToCategoryRule, convertRawCategoryRulesToCategoryRules } from '../utils';
 
 export const fetchCategoriesWrapped = async (): Promise<CategoryWrapped[]> => {
   const categories = await client.category.findMany();
 
   return categories.map(x => ({
     ...x,
-    rules: JSON.parse(x.rulesSerialized).map(convertRawCategoryRuleToCategoryRule),
+    rules: convertRawCategoryRulesToCategoryRules(JSON.parse(x.rulesSerialized)),
   }));
 }
 
@@ -17,7 +17,7 @@ export const scanAndAssignCategories = async (categoryName: string) => {
     },
   });
 
-  const rules: CategoryRule[] = JSON.parse(category.rulesSerialized).map(convertRawCategoryRuleToCategoryRule);
+  const rules: CategoryRule[] = convertRawCategoryRulesToCategoryRules(JSON.parse(category.rulesSerialized));
 
   const transactionIds: number[] = [];
   const transactions = await client.transaction.findMany();
