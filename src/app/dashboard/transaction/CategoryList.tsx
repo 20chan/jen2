@@ -17,23 +17,6 @@ export function CategoryList({
   categories,
   context,
 }: CategoryListProps) {
-  const applyScanned = async (formData: FormData) => {
-    'use server';
-
-    const idRaw = formData.get('id')?.toString();
-    if (idRaw === undefined) {
-      return;
-    }
-
-    const categoryId = parseInt(idRaw);
-    if (isNaN(categoryId)) {
-      return;
-    }
-
-    await scanAndAssignCategories(categoryId);
-    revalidateTag('categories');
-  };
-
   return (
     <div className='flex flex-row gap-4'>
       <div className='flex flex-col gap-1 w-80'>
