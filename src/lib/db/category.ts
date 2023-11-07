@@ -87,18 +87,11 @@ export const assignCategories = async (categoryId: number, transactionId: number
 };
 
 export const unassignCategories = async (categoryId: number, transactionId: number) => {
-  return await client.category.update({
+  return await client.categoriesOnTransaction.delete({
     where: {
-      id: categoryId,
-    },
-    data: {
-      Transaction: {
-        disconnect: {
-          transactionId_categoryId: {
-            transactionId,
-            categoryId,
-          },
-        },
+      transactionId_categoryId: {
+        transactionId,
+        categoryId,
       },
     },
   });

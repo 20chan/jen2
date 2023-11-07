@@ -6,6 +6,7 @@ import { revalidateTag } from 'next/cache';
 import { CategoryLabel } from './CategoryLabel';
 import { TransactionListPageContext } from './TransactionListPageContext';
 import { CategoryParams } from '@/lib/params';
+import { CategoryItem } from './CategoryItem';
 
 type CategoryListProps = {
   categories: CategoryWrapped[];
@@ -34,65 +35,16 @@ export function CategoryList({
   };
 
   return (
-    <div className='flex flex-row'>
-      <div className='flex flex-col gap-2'>
+    <div className='flex flex-row gap-4'>
+      <div className='flex flex-col gap-1 w-80'>
         {
-          categories.map(x => (
-            <div key={x.name}>
-              <div>
-                <div className='inline-block w-52'>
-                  {x.name}
-                </div>
-                <span className='text-sm'>
-                  <CategoryLabel category={x} />
-                </span>
-              </div>
-
-              <div>
-                {
-                  x.rules.map((rule, i) => (
-                    <div key={`${x.name}:rule:${i}`} className='ml-2 flex flex-row text-sm'>
-                      <div className='mr-1'>
-                        OR
-                      </div>
-
-                      <div>
-                        {
-                          rule.pairs.map((pair, j) => (
-                            <div key={`${x.name}:rule:${i}:pair:${j}`} className='ml-2 flex flex-row'>
-                              <div className='mr-1'>
-                                AND
-                              </div>
-                              <div>
-                                {pair.key} =~ <span className='bg-half-dark-white/10 px-1'>{pair.value}</span>
-                              </div>
-                            </div>
-                          ))
-                        }
-                      </div>
-                    </div>
-                  ))
-                }
-              </div>
-
-              {
-                context.categoryParams.scan === x.id ? (
-                  <form action={applyScanned}>
-                    <input name='categoryName' type='hidden' value={x.name} />
-                    <input type='submit' className='block w-full text-center bg-half-dark-red/60 text-sm uppercase cursor-pointer' value='apply' />
-                  </form>
-                ) : (
-                  <Link href={`/dashboard/transaction?${CategoryParams.merge(context.props.searchParams, { scan: x.id })}`} className='block w-full text-center bg-half-dark-yellow/60 text-sm uppercase'>
-                    test
-                  </Link>
-                )
-              }
-            </div>
+          categories.map(category => (
+            <CategoryItem category={category} context={context} />
           ))
         }
       </div>
 
-      <div>
+      <div className='w-80'>
         <CreateOrEditCategoryForm />
       </div>
     </div>

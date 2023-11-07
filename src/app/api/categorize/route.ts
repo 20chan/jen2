@@ -1,7 +1,4 @@
 import { assignCategories, unassignCategories } from '@/lib/db/category';
-import { client } from '@/lib/prisma';
-import { CategoryWrapped, convertCategoryRuleToRawCategoryRule } from '@/lib/utils';
-import { Category } from '@prisma/client';
 import { revalidateTag } from 'next/cache';
 
 async function POST(request: Request) {
