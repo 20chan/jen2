@@ -9,15 +9,17 @@ interface CreateOrEditCategoryFormProps {
   category?: CategoryWrapped;
 }
 
+const defaultValue = {
+  id: -1,
+  name: '',
+  color: '#fff',
+  label: '',
+  rules: [],
+};
+
 export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormProps) {
   const [show, setShow] = useState(false);
-  const [input, setInput] = useState<CategoryWrapped>(category ?? {
-    id: -1,
-    name: '',
-    color: '#fff',
-    label: '',
-    rules: [],
-  });
+  const [input, setInput] = useState<CategoryWrapped>(category ?? defaultValue);
 
   const [showColorPicker, setShowColorPicker] = useState(false);
 
@@ -25,6 +27,10 @@ export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormP
   const inputCssPlaceholder = 'focus:outline-none px-1 py-0.5 font-normal';
 
   const plusButtonCss = 'inline-block px-10 bg-half-dark-green/20 hover:bg-half-dark-green/50';
+
+  const clear = () => {
+    setInput(defaultValue);
+  };
 
   const request = async () => {
     if (input.id === -1) {

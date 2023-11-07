@@ -7,17 +7,19 @@ import { TransactionWithCategories } from '@/lib/db/transaction';
 import { useState } from 'react';
 import { EditCategoryMenu } from './EditCategoryMenu';
 import { CategoryLabel } from './CategoryLabel';
+import { CategoryParams } from '@/lib/params';
+import { TransactionListPageContext } from './TransactionListPageContext';
 
 interface TransactionTableProps {
   transactions: TransactionWithCategories[];
   categories: CategoryWrapped[];
-  scanFor?: string;
+  context: TransactionListPageContext;
 }
 
 export function TransactionTable({
   transactions,
   categories,
-  scanFor,
+  context,
 }: TransactionTableProps) {
   const [selectedTransaction, setSelectedTransaction] = useState<TransactionWithCategories | null>(null);
   const [showEditMenu, setShowEditMenu] = useState(false);
@@ -81,7 +83,7 @@ export function TransactionTable({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const scanCategrory = categories.find(x => x.name === scanFor);
+  const scanCategrory = categories.find(x => x.id === context.categoryParams.scan);
 
   return (
     <div>

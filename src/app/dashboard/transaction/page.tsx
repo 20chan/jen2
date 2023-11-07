@@ -3,20 +3,26 @@ import { CategoryList } from './CategoryList';
 import { fetchTransactionsWithCategories } from '@/lib/db/transaction';
 import { fetchCategoriesWrapped } from '@/lib/db/category';
 import { NextProps } from '@/lib/NextProps';
+import { CategoryParams } from '@/lib/params';
+import { PaginationParams } from '@/lib/params/PaginationParams';
 
 export default async function TransactionListPage(props: NextProps) {
   const transactions = await fetchTransactionsWithCategories();
   const categories = await fetchCategoriesWrapped();
 
-  const scanFor = props.searchParams['scanfor'];
+  const context = {
+    props,
+    categoryParams: CategoryParams.parse(props),
+    paginationParams: PaginationParams.parse(props),
+  };
 
   return (
     <div className='flex flex-row'>
       <div>
-        <TransactionTable transactions={[...transactions].slice(0, 100)} categories={categories} scanFor={scanFor} />
+        <TransactionTable transactions={[...transactions].slice(0, 100)} categories={categories} context={context} />
       </div>
       <div className='ml-4 border-l border-l-half-dark-white/50 px-4'>
-        <CategoryList categories={categories} scanFor={scanFor} />
+        <CategoryList categories={categories} context={context} />
       </div>
     </div>
   )
