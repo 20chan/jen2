@@ -19,7 +19,6 @@ const defaultValue = {
 
 export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormProps) {
   const [input, setInput] = useState<CategoryWrapped>(category ?? defaultValue);
-
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   const labelCssPlaceholder = 'text-sm inline-block w-12';
@@ -28,10 +27,10 @@ export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormP
   const plusButtonCss = 'inline-block px-10 bg-half-dark-green/20 hover:bg-half-dark-green/50';
 
   useEffect(() => {
-    if (category && input.id !== category.id) {
-      setInput(category);
+    if (input.id !== category?.id) {
+      setInput(category ?? defaultValue);
     }
-  }, [category]);
+  }, [input.id, category]);
 
   const clear = () => {
     setInput(category ?? defaultValue);

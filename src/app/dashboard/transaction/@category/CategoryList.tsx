@@ -22,7 +22,7 @@ export function CategoryList({
       <div className='flex flex-col gap-1 w-80'>
         {
           categorySorted.map(category => (
-            <CategoryItem category={category} context={context} />
+            <CategoryItem key={category.id} category={category} context={context} />
           ))
         }
 
