@@ -1,9 +1,9 @@
 'use client';
 
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SketchPicker } from 'react-color';
-import { CategoryWrapped, CategoryRules, RuleKeys, presetColors } from '@/lib/utils';
+import { CategoryWrapped, RuleKeys, presetColors } from '@/lib/utils';
 
 interface CreateOrEditCategoryFormProps {
   category?: CategoryWrapped;
@@ -18,7 +18,7 @@ const defaultValue = {
 };
 
 export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormProps) {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(category !== undefined);
   const [input, setInput] = useState<CategoryWrapped>(category ?? defaultValue);
 
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -28,8 +28,14 @@ export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormP
 
   const plusButtonCss = 'inline-block px-10 bg-half-dark-green/20 hover:bg-half-dark-green/50';
 
+  useEffect(() => {
+    if (category && input.id !== category.id) {
+      setInput(category);
+    }
+  }, [category]);
+
   const clear = () => {
-    setInput(defaultValue);
+    setInput(category ?? defaultValue);
   };
 
   const request = async () => {
@@ -108,7 +114,13 @@ export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormP
                 <div>
                   {
                     input.rules.map((x, i) => (
-                      <div key={i} className='ml-4'>
+                      <div key={`rule:${i}`} className='flex flex-row'>
+                        <button onClick={() => setInput({
+                          ...input,
+                          rules: input.rules.filter((y, j) => j !== i),
+                        })} className='w-3 mr-1 my-0.5 text-half-red text-sm bg-half-dark-red/40'>
+                          -
+                        </button>
                         <div>
                           <label className={classNames(labelCssPlaceholder)} htmlFor='pairs'>
                             Pairs
@@ -126,38 +138,51 @@ export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormP
                           <div>
                             {
                               x.pairs.map((y, j) => (
-                                <div key={j} className='ml-4'>
+                                <div key={`pair:${j}`} className='flex flex-row'>
+
+                                  <button onClick={() => setInput({
+                                    ...input,
+                                    rules: input.rules.map((w, k) => k === i ? {
+                                      ...w,
+                                      pairs: w.pairs.filter((v, l) => l !== j),
+                                    } : w),
+                                  })} className='w-3 mr-1 my-0.5 text-half-red text-sm bg-half-dark-red/40'>
+                                    -
+                                  </button>
+
                                   <div>
-                                    <label className={labelCssPlaceholder} htmlFor='key'>Key</label>
-                                    <select className={inputCssPlaceholder} value={y.key} onChange={z => setInput({
-                                      ...input,
-                                      rules: input.rules.map((w, k) => k === i ? {
-                                        ...w,
-                                        pairs: w.pairs.map((v, l) => l === j ? {
-                                          ...v,
-                                          key: z.target.value,
-                                        } : v),
-                                      } : w),
-                                    })}>
-                                      {
-                                        RuleKeys.map(x => (
-                                          <option key={x} value={x}>{x}</option>
-                                        ))
-                                      }
-                                    </select>
-                                  </div>
-                                  <div>
-                                    <label className={labelCssPlaceholder} htmlFor='value'>Value</label>
-                                    <input className={inputCssPlaceholder} type='text' value={y.value} onChange={z => setInput({
-                                      ...input,
-                                      rules: input.rules.map((w, k) => k === i ? {
-                                        ...w,
-                                        pairs: w.pairs.map((v, l) => l === j ? {
-                                          ...v,
-                                          value: z.target.value,
-                                        } : v),
-                                      } : w),
-                                    })} />
+                                    <div>
+                                      <label className={labelCssPlaceholder} htmlFor='key'>Key</label>
+                                      <select className={inputCssPlaceholder} value={y.key} onChange={z => setInput({
+                                        ...input,
+                                        rules: input.rules.map((w, k) => k === i ? {
+                                          ...w,
+                                          pairs: w.pairs.map((v, l) => l === j ? {
+                                            ...v,
+                                            key: z.target.value,
+                                          } : v),
+                                        } : w),
+                                      })}>
+                                        {
+                                          RuleKeys.map(x => (
+                                            <option key={x} value={x}>{x}</option>
+                                          ))
+                                        }
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <label className={labelCssPlaceholder} htmlFor='value'>Value</label>
+                                      <input className={inputCssPlaceholder} type='text' value={y.value} onChange={z => setInput({
+                                        ...input,
+                                        rules: input.rules.map((w, k) => k === i ? {
+                                          ...w,
+                                          pairs: w.pairs.map((v, l) => l === j ? {
+                                            ...v,
+                                            value: z.target.value,
+                                          } : v),
+                                        } : w),
+                                      })} />
+                                    </div>
                                   </div>
                                 </div>
                               ))
@@ -172,8 +197,8 @@ export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormP
             </div>
 
             <div>
-              <button className='w-full bg-half-dark-green/40 hover:bg-half-dark-green/70 py-1' onClick={request}>
-                Create
+              <button className='w-full bg-half-dark-green/50 hover:bg-half-dark-green/70 py-1' onClick={request}>
+                {input?.id === -1 ? 'Create' : 'Update'}
               </button>
             </div>
           </div>
