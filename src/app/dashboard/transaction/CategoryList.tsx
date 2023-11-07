@@ -28,8 +28,8 @@ export function CategoryList({
 
         <Link href={`/dashboard/transaction?${CategoryParams.merge(context.props.searchParams, {
           edit: null,
-          create: true,
-        })}`} className='w-full bg-half-dark-green/20 hover:bg-half-dark-green/50 py-0.5 text-center'>
+          create: context.categoryParams.create ? null : true,
+        })}`} className='w-full bg-half-dark-green/50 hover:bg-half-dark-green/70 py-0.5 text-center'>
           +
         </Link>
       </div>
