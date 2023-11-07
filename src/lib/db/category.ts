@@ -11,7 +11,6 @@ import {
 
 export const fetchCategoriesWrapped = unstable_cache(async (): Promise<CategoryWrapped[]> => {
   const categories = await client.category.findMany();
-
   return categories.map(x => ({
     ...x,
     rules: convertRawCategoryRulesToCategoryRules(JSON.parse(x.rulesSerialized)),

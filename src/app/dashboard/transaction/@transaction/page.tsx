@@ -1,5 +1,4 @@
 import { TransactionTable } from './TransactionTable';
-import { CategoryList } from './CategoryList';
 import { fetchTransactionsWithCategories } from '@/lib/db/transaction';
 import { fetchCategoriesWrapped } from '@/lib/db/category';
 import { NextProps } from '@/lib/NextProps';
@@ -17,13 +16,8 @@ export default async function TransactionListPage(props: NextProps) {
   };
 
   return (
-    <div className='flex flex-row'>
-      <div>
-        <TransactionTable transactions={[...transactions].slice(0, 100)} categories={categories} context={context} />
-      </div>
-      <div className='ml-4 border-l border-l-half-dark-white/50 px-4'>
-        <CategoryList categories={categories} context={context} />
-      </div>
+    <div>
+      <TransactionTable transactions={[...transactions].slice(0, 100)} categories={categories} context={context} />
     </div>
   )
 }

@@ -1,8 +1,8 @@
 'use client';
 
 import { CategoryWrapped } from '@/lib/utils';
-import { TransactionListPageContext } from './TransactionListPageContext';
-import { CategoryLabel } from './CategoryLabel';
+import { TransactionListPageContext } from '../TransactionListPageContext';
+import { CategoryLabel } from '../CategoryLabel';
 import Link from 'next/link';
 import { CategoryParams } from '@/lib/params';
 import { useState } from 'react';

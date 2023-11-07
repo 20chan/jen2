@@ -2,7 +2,7 @@
 
 import { TransactionWithCategories } from '@/lib/db/transaction';
 import { CategoryWrapped } from '@/lib/utils';
-import { CategoryLabel } from './CategoryLabel';
+import { CategoryLabel } from '../CategoryLabel';
 
 export function EditCategoryMenu({
   transaction,

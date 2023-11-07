@@ -1,6 +1,6 @@
 import { CreateOrEditCategoryForm } from './CreateOrEditCategoryForm';
 import { CategoryWrapped } from '@/lib/utils';
-import { TransactionListPageContext } from './TransactionListPageContext';
+import { TransactionListPageContext } from '../TransactionListPageContext';
 import { CategoryItem } from './CategoryItem';
 import { CategoryParams } from '@/lib/params';
 import Link from 'next/link';

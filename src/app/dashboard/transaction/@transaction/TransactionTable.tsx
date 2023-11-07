@@ -6,9 +6,9 @@ import { CategoryWrapped, checkRules, formatDate, lerpAmount } from '@/lib/utils
 import { TransactionWithCategories } from '@/lib/db/transaction';
 import { useState } from 'react';
 import { EditCategoryMenu } from './EditCategoryMenu';
-import { CategoryLabel } from './CategoryLabel';
+import { CategoryLabel } from '../CategoryLabel';
 import { CategoryParams } from '@/lib/params';
-import { TransactionListPageContext } from './TransactionListPageContext';
+import { TransactionListPageContext } from '../TransactionListPageContext';
 
 interface TransactionTableProps {
   transactions: TransactionWithCategories[];
