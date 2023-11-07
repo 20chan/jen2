@@ -1,23 +1,12 @@
-import { client } from '@/lib/prisma';
-import { CategoryWrapped, convertCategoryRuleToRawCategoryRule, convertCategoryRulesToRawCategoryRules } from '@/lib/utils';
-import { Category } from '@prisma/client';
+import { archiveCategory, createCategory, updateCategory } from '@/lib/db/category';
+import { CategoryWrapped } from '@/lib/utils';
 import { revalidatePath } from 'next/cache';
 
 async function POST(request: Request) {
   const input = await request.json() as CategoryWrapped;
-  const data: Omit<Category, 'id'> = {
-    name: input.name,
-    color: input.color,
-    label: input.label,
-    rulesSerialized: JSON.stringify(convertCategoryRulesToRawCategoryRules(input.rules)),
-    archived: false,
-  };
+  const resp = await createCategory(input);
 
-  const resp = await client.category.create({
-    data,
-  });
-
-  revalidatePath('/dashboard/transaction');
+  revalidateCategories();
 
   return Response.json({
     ok: true,
@@ -27,20 +16,9 @@ async function POST(request: Request) {
 
 async function PUT(request: Request) {
   const input = await request.json() as CategoryWrapped;
-  const data: Omit<Category, 'id'> = {
-    name: input.name,
-    color: input.color,
-    label: input.label,
-    rulesSerialized: JSON.stringify(convertCategoryRulesToRawCategoryRules(input.rules)),
-    archived: false,
-  };
+  const resp = await updateCategory(input);
 
-  const resp = await client.category.update({
-    where: { id: input.id },
-    data,
-  });
-
-  revalidatePath('/dashboard/transaction');
+  revalidateCategories();
 
   return Response.json({
     ok: true,
@@ -50,22 +28,18 @@ async function PUT(request: Request) {
 
 async function DELETE(request: Request) {
   const input = await request.json() as CategoryWrapped;
+  const resp = await archiveCategory(input);
 
-  // TODO: delete transactions categories that are assigned to this category
-
-  const resp = await client.category.update({
-    where: { id: input.id },
-    data: {
-      archived: true,
-    },
-  });
-
-  revalidatePath('/dashboard/transaction');
+  revalidateCategories();
 
   return Response.json({
     ok: true,
     data: resp,
   });
+}
+
+function revalidateCategories() {
+  revalidatePath('/dashboard/transaction');
 }
 
 export {

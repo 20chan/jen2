@@ -1,5 +1,12 @@
 import { client } from '../prisma'
-import { CategoryRule, CategoryWrapped, checkRules, convertRawCategoryRuleToCategoryRule, convertRawCategoryRulesToCategoryRules } from '../utils';
+import {
+  CategoryRule,
+  CategoryWrapped,
+  checkRules,
+  convertCategoryRulesToRawCategoryRules,
+  convertRawCategoryRuleToCategoryRule,
+  convertRawCategoryRulesToCategoryRules,
+} from '../utils';
 
 export const fetchCategoriesWrapped = async (): Promise<CategoryWrapped[]> => {
   const categories = await client.category.findMany();
@@ -93,3 +100,52 @@ export const unassignCategories = async (categoryId: number, transactionId: numb
     },
   });
 };
+
+export const createCategory = async (category: Omit<CategoryWrapped, 'id' | 'archived'>) => {
+  const data = {
+    name: category.name,
+    color: category.color,
+    label: category.label,
+    rulesSerialized: JSON.stringify(convertCategoryRulesToRawCategoryRules(category.rules)),
+    archived: false,
+  };
+
+  return await client.category.create({
+    data,
+  });
+}
+
+export const updateCategory = async (category: Omit<CategoryWrapped, 'archived'>) => {
+  const data = {
+    id: category.id,
+    name: category.name,
+    color: category.color,
+    label: category.label,
+    rulesSerialized: JSON.stringify(convertCategoryRulesToRawCategoryRules(category.rules)),
+  };
+
+  return await client.category.update({
+    where: { id: data.id },
+    data,
+  });
+}
+
+export const archiveCategory = async (category: CategoryWrapped) => {
+  // TODO: delete transactions categories that are assigned to this category
+
+  return await client.category.update({
+    where: { id: category.id },
+    data: {
+      archived: true,
+    },
+  });
+}
+
+export const unarchiveCategory = async (category: CategoryWrapped) => {
+  return await client.category.update({
+    where: { id: category.id },
+    data: {
+      archived: false,
+    },
+  });
+}
