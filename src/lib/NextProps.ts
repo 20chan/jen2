@@ -64,7 +64,8 @@ export namespace NextSearchParams {
       return [];
     }
 
-    const value = valueRaw.map(value => value === 'true');
+    // 빈 값은 true flag로 처리한다.
+    const value = valueRaw.map(value => value === 'true' || value === '');
     if (value.some(value => typeof value !== 'boolean')) {
       return [];
     }

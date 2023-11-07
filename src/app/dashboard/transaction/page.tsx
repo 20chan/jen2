@@ -10,6 +10,11 @@ export default async function TransactionListPage(props: NextProps) {
   const transactions = await fetchTransactionsWithCategories();
   const categories = await fetchCategoriesWrapped();
 
+  console.log({
+    params: props.searchParams,
+    x: JSON.stringify(props.searchParams),
+  })
+
   const context = {
     props,
     categoryParams: CategoryParams.parse(props),
