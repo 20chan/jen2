@@ -4,8 +4,14 @@ import { NextProps } from '@/lib/NextProps';
 import { CategoryParams } from '@/lib/params';
 import { PaginationParams } from '@/lib/params/PaginationParams';
 
+export const preload = async (props: NextProps) => {
+  return {
+    categories: await fetchCategoriesWrapped(),
+  }
+}
+
 export default async function TransactionListPage(props: NextProps) {
-  const categories = await fetchCategoriesWrapped();
+  const { categories } = await preload(props);
 
   const context = {
     props,

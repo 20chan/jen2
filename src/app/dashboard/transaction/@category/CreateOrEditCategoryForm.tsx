@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { SketchPicker } from 'react-color';
 import { CategoryWrapped, RuleKeys, presetColors } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 
 interface CreateOrEditCategoryFormProps {
   category?: CategoryWrapped;
@@ -20,6 +21,8 @@ const defaultValue = {
 export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormProps) {
   const [input, setInput] = useState<CategoryWrapped>(category ?? defaultValue);
   const [showColorPicker, setShowColorPicker] = useState(false);
+
+  const router = useRouter();
 
   const labelCssPlaceholder = 'text-sm inline-block w-12';
   const inputCssPlaceholder = 'focus:outline-none px-1 py-0.5 font-normal';
@@ -50,6 +53,8 @@ export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormP
         body: JSON.stringify(input),
       });
     }
+
+    router.refresh();
   };
 
   return (
