@@ -1,5 +1,4 @@
 import { CategoryList } from './CategoryList';
-import { fetchTransactionsWithCategories } from '@/lib/db/transaction';
 import { fetchCategoriesWrapped } from '@/lib/db/category';
 import { NextProps } from '@/lib/NextProps';
 import { CategoryParams } from '@/lib/params';
