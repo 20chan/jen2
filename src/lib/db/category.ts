@@ -9,15 +9,13 @@ import {
   convertRawCategoryRulesToCategoryRules,
 } from '../utils';
 
-export const fetchCategoriesWrapped = unstable_cache(async (): Promise<CategoryWrapped[]> => {
+export const fetchCategoriesWrapped = async (): Promise<CategoryWrapped[]> => {
   const categories = await client.category.findMany();
   return categories.map(x => ({
     ...x,
     rules: convertRawCategoryRulesToCategoryRules(JSON.parse(x.rulesSerialized)),
   }));
-}, undefined, {
-  tags: ['categories'],
-});
+};
 
 export const scanAndAssignCategories = async (categoryId: number) => {
   const category = await client.category.findUniqueOrThrow({
@@ -127,13 +125,23 @@ export const updateCategory = async (category: Omit<CategoryWrapped, 'archived'>
 
 export const archiveCategory = async (category: CategoryWrapped) => {
   // TODO: delete transactions categories that are assigned to this category
+  const relations = await client.categoriesOnTransaction.deleteMany({
+    where: {
+      categoryId: category.id,
+    },
+  });
 
-  return await client.category.update({
+  const categoryResp = await client.category.update({
     where: { id: category.id },
     data: {
       archived: true,
     },
   });
+
+  return {
+    relations,
+    category: categoryResp,
+  };
 }
 
 export const unarchiveCategory = async (category: CategoryWrapped) => {

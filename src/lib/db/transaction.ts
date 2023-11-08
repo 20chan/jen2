@@ -13,7 +13,7 @@ export type TransactionWithCategories = Transaction & {
   categories: CategoriesOnTransactionWithCategory[];
 }
 
-export const fetchTransactionsWithCategories = unstable_cache(async () => {
+export const fetchTransactionsWithCategories = async () => {
   const transactions: TransactionWithCategories[] = await client.transaction.findMany({
     orderBy: {
       date: 'desc',
@@ -28,6 +28,4 @@ export const fetchTransactionsWithCategories = unstable_cache(async () => {
   });
 
   return transactions;
-}, undefined, {
-  tags: ['transactions', 'categories'],
-});
+};
