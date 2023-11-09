@@ -5,7 +5,7 @@ const UNITS = [
 ]
 
 export function formatCurrency(value: number): string {
-  let x = value;
+  let x = Math.abs(value);
 
   const units = [...UNITS];
   const result = [];
@@ -20,5 +20,16 @@ export function formatCurrency(value: number): string {
     result.unshift(`${r}${unit}`);
   }
 
-  return result.join(' ');
+  const sign = value < 0 ? '-' : '';
+  return sign + result.join(' ');
+}
+
+export function formatSimpleCurrency(value: number): string {
+  if (value < 1000) {
+    return `${value}`;
+  } else if (value < 1000 * 1000) {
+    return `${Math.floor(value / 1000)}K`;
+  } else {
+    return `${Math.floor(value / (1000 * 1000))}M`;
+  }
 }

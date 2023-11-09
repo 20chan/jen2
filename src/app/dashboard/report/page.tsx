@@ -20,10 +20,9 @@ export default async function MonthlyReportPage(props: MonthlyReportProps) {
   );
 
   return (
-    <div>
+    <div className='flex flex-col gap-24'>
       {Object.entries(months).map(([month, transactions]) => (
         <div key={month}>
-          <h2>{month}</h2>
           <TransactionsReport transactions={transactions} />
         </div>
       ))}
