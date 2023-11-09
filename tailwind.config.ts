@@ -13,6 +13,10 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      fontFamily: {
+        default: ['var(--font-mono)'],
+        kr: ['var(--font-mono-kr)'],
+      },
       textColor: {
         'half': '#dcdfe4',
         'half-red': '#e06c75',

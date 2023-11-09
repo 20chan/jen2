@@ -1,12 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import localFont from 'next/font/local';
 import Link from 'next/link';
 import AuthProvider from './providers/AuthProvider';
 import './globals.css'
 import { AuthProxy } from '@/components/AuthProxy';
-
-const inter = Inter({ subsets: ['latin'] })
 
 const mono = localFont({
   src: [
@@ -23,12 +20,30 @@ const mono = localFont({
     {
       path: '../fonts/iosevka-ss04-bold.woff2',
       weight: '700',
-      style: 'semibold',
+      style: 'bold',
     },
   ],
   display: 'block',
   variable: '--font-mono',
-})
+  fallback: ['--font-mono-kr'],
+});
+
+const monoKr = localFont({
+  src: [
+    {
+      path: '../fonts/static/NotoSansKR-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/static/NotoSansKR-Bold.ttf',
+      weight: '700',
+      style: 'bold',
+    },
+  ],
+  display: 'block',
+  variable: '--font-mono-kr',
+});
 
 export const metadata: Metadata = {
   title: 'Jen2',
@@ -45,7 +60,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={mono.className}>
+      <body className={`${monoKr.variable} ${mono.variable} font-default`}>
         <AuthProvider>
           <div className='sticky top-0 bg-half-key p-4 py-1 flex justify-center items-stretch'>
             <div className='max-w-4xl mr-4'>
