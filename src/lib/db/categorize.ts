@@ -11,8 +11,12 @@ export const assignCategory = async (options: { transactionId: number, categoryI
   });
 };
 
-export const assignCategories = async (options: { transactionId: number, categoryIds: number[] }) => {
-  const { transactionId, categoryIds } = options;
+export const assignCategories = async (options: {
+  transactionId: number,
+  categoryIds: number[],
+  manuallyAssigned: boolean,
+}) => {
+  const { transactionId, categoryIds, manuallyAssigned } = options;
 
   return await client.transaction.update({
     where: {
@@ -20,10 +24,16 @@ export const assignCategories = async (options: { transactionId: number, categor
     },
     data: {
       categories: {
-        connect: categoryIds.map(categoryId => ({
-          transactionId_categoryId: {
-            transactionId,
+        connectOrCreate: categoryIds.map(categoryId => ({
+          create: {
             categoryId,
+            manuallyAssigned,
+          },
+          where: {
+            transactionId_categoryId: {
+              transactionId,
+              categoryId,
+            },
           },
         })),
       },

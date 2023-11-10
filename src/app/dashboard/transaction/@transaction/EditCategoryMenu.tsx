@@ -4,6 +4,7 @@ import { TransactionWithCategories } from '@/lib/db/transaction';
 import { CategoryWrapped } from '@/lib/utils';
 import { CategoryLabel } from '../CategoryLabel';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export function EditCategoryMenu({
   transaction,
@@ -22,51 +23,64 @@ export function EditCategoryMenu({
 }) {
   const router = useRouter();
 
-  async function handleAddCategory(category: CategoryWrapped) {
-    const res = await fetch('/api/categorize', {
+  const [activeIds, setActiveIds] = useState<number[]>(transaction.categories.map(x => x.categoryId));
+
+  useEffect(() => {
+    setActiveIds(transaction.categories.map(x => x.categoryId));
+  }, [transaction.id, enabled]);
+
+  async function submitChanges() {
+    const exists = transaction.categories.map(x => x.categoryId);
+    const categoryIdsAdded = activeIds.filter(x => !exists.includes(x));
+    const categoryIdsRemoved = exists.filter(x => !activeIds.includes(x));
+
+    const res = await fetch('/api/categorize/batch', {
       method: 'POST',
       body: JSON.stringify({
         transactionId: transaction.id,
-        categoryId: category.id,
+        categoryIdsAdded,
+        categoryIdsRemoved,
       }),
     });
-    router.refresh();
-  }
 
-  async function handleRemoveCategory(category: CategoryWrapped) {
-    const res = await fetch('/api/categorize', {
-      method: 'DELETE',
-      body: JSON.stringify({
-        transactionId: transaction.id,
-        categoryId: category.id,
-      }),
-    });
+    setEnabled(false);
     router.refresh();
   }
 
   return (
     <div style={{ visibility: enabled ? 'visible' : 'hidden', position: 'absolute', zIndex: '10', top, left }}>
       <div className='fixed inset-0 z-10' onClick={() => setEnabled(false)} />
-      <div className='bg-half-dark-black/95 border border-half-dark-white relative z-20'>
-        <div className='flex flex-col px-4 py-2'>
-          {
-            categories.map(category => (
-              <div key={category.name} className='py-0.5 flex'>
-                <div className='flex-1'>
-                  <CategoryLabel category={category} />
-                </div>
+      <div className='max-w-lg bg-half-dark-black/95 border border-half-dark-white relative z-20'>
+        <div className='px-4 py-4'>
+          <div className='flex flex-row flex-wrap gap-1 pb-2 mb-2 border-b border-b-half-dark-white/40'>
+            {
+              activeIds.map(id => {
+                const category = categories.find(x => x.id === id)!;
+                return (
+                  <div key={id} onClick={() => setActiveIds(activeIds.filter(x => x !== id))} className='cursor-pointer'>
+                    <CategoryLabel category={category} />
+                  </div>
+                )
+              })
+            }
+          </div>
+          <div className='flex flex-row flex-wrap gap-1 mb-1'>
+            {
+              categories.filter(x => !activeIds.includes(x.id)).map(category => {
+                return (
+                  <div key={category.id} onClick={() => setActiveIds([...activeIds, category.id])} className='cursor-pointer'>
+                    <CategoryLabel category={category} />
+                  </div>
+                )
+              })
+            }
+          </div>
 
-                <div className='ml-2'>
-                  <button className='w-12 bg-half-dark-green/30' onClick={() => handleAddCategory(category)}>
-                    +
-                  </button>
-                  <button className='w-12 bg-half-dark-red/30' onClick={() => handleRemoveCategory(category)}>
-                    x
-                  </button>
-                </div>
-              </div>
-            ))
-          }
+          <div>
+            <button onClick={submitChanges} className='px-2 py-1 bg-half-dark-green/50 hover:bg-half-dark-green/70 w-full'>
+              Update
+            </button>
+          </div>
         </div>
       </div>
 
