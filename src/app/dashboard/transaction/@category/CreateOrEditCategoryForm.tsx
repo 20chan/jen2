@@ -16,6 +16,7 @@ const defaultValue = {
   color: '#fff',
   label: '',
   rules: [],
+  tag: true,
 };
 
 export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormProps) {
@@ -96,6 +97,13 @@ export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormP
               </div>
             )
           }
+        </div>
+        <div>
+          <label className={classNames(labelCssPlaceholder)}>Tag</label>
+          <input className={`${inputCssPlaceholder} w-4 h-4`} type='checkbox' checked={input.tag} onChange={x => setInput({
+            ...input,
+            tag: x.target.checked,
+          })} />
         </div>
 
         <div>

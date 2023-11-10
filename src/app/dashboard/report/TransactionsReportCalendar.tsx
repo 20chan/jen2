@@ -2,7 +2,7 @@
 
 import * as R from 'remeda';
 import { Transaction } from '@prisma/client';
-import { formatSimpleCurrency, getDay, moment } from '@/lib/utils';
+import { formatSimpleCurrency, getDay, lerpAmount, moment } from '@/lib/utils';
 import { useCalendar } from '@h6s/calendar';
 import classNames from 'classnames';
 
@@ -37,8 +37,12 @@ export function TransactionsReportCalendar({
               const dailyIncoming = R.sumBy(dailyTransactions.filter(x => x.amount > 0), x => x.amount);
               const dailyOutgoing = R.sumBy(dailyTransactions.filter(x => x.amount < 0), x => x.amount);
 
+              const isToday = moment().isSame(value, 'day');
+
               return (
-                <td key={key} className='w-20 py-2 align-top h-20 border-b border-b-half-dark-white/30'>
+                <td key={key} className={classNames('w-20 py-2 align-top h-20 border-b border-b-half-dark-white/30', {
+                  'bg-half-dark-white/20': isToday,
+                })}>
                   <div>
                     <div className={classNames('text-center text-lg', {
                       'text-half-white/40': !isCurrentMonth,
@@ -50,13 +54,13 @@ export function TransactionsReportCalendar({
                         <div className='text-center text-xs'>
                           <div className='min-h-[1rem]'>
                             {dailyOutgoing < 0 && (
-                              <div className='text-half-red/80'>
+                              <div style={{ color: lerpAmount(-70000, 100000, dailyOutgoing) }}>
                                 -{formatSimpleCurrency(Math.abs(dailyOutgoing))}
                               </div>
                             )}
                           </div>
                           {dailyIncoming > 0 && (
-                            <div className='text-half-blue/80'>
+                            <div style={{ color: lerpAmount(-70000, 100000, dailyIncoming) }}>
                               +{formatSimpleCurrency(dailyIncoming)}
                             </div>
                           )}

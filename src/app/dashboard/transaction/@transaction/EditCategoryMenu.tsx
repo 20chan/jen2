@@ -1,7 +1,7 @@
 'use client';
 
 import { TransactionWithCategories } from '@/lib/db/transaction';
-import { CategoryWrapped } from '@/lib/utils';
+import { CategoryWrapped, sortCategories } from '@/lib/utils';
 import { CategoryLabel } from '../CategoryLabel';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -47,6 +47,9 @@ export function EditCategoryMenu({
     router.refresh();
   }
 
+  const categoryAdded = sortCategories(categories.filter(x => activeIds.includes(x.id)));
+  const categoryNotAdded = sortCategories(categories.filter(x => !activeIds.includes(x.id)));
+
   return (
     <div style={{ visibility: enabled ? 'visible' : 'hidden', position: 'absolute', zIndex: '10', top, left }}>
       <div className='fixed inset-0 z-10' onClick={() => setEnabled(false)} />
@@ -54,10 +57,9 @@ export function EditCategoryMenu({
         <div className='px-4 py-4'>
           <div className='flex flex-row flex-wrap gap-1 pb-2 mb-2 border-b border-b-half-dark-white/40'>
             {
-              activeIds.map(id => {
-                const category = categories.find(x => x.id === id)!;
+              categoryAdded.map(category => {
                 return (
-                  <div key={id} onClick={() => setActiveIds(activeIds.filter(x => x !== id))} className='cursor-pointer'>
+                  <div key={category.id} onClick={() => setActiveIds(activeIds.filter(x => x !== category.id))} className='cursor-pointer'>
                     <CategoryLabel category={category} />
                   </div>
                 )
@@ -66,7 +68,7 @@ export function EditCategoryMenu({
           </div>
           <div className='flex flex-row flex-wrap gap-1 mb-1'>
             {
-              categories.filter(x => !activeIds.includes(x.id)).map(category => {
+              categoryNotAdded.map(category => {
                 return (
                   <div key={category.id} onClick={() => setActiveIds([...activeIds, category.id])} className='cursor-pointer'>
                     <CategoryLabel category={category} />

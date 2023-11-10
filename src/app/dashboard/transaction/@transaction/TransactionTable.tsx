@@ -2,7 +2,7 @@
 
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { CategoryWrapped, checkRules, formatDate, lerpAmount } from '@/lib/utils';
+import { CategoryWrapped, checkRules, formatDate, lerpAmount, sortCategories } from '@/lib/utils';
 import { TransactionWithCategories } from '@/lib/db/transaction';
 import { useEffect, useState } from 'react';
 import { EditCategoryMenu } from './EditCategoryMenu';
@@ -63,9 +63,11 @@ export function TransactionTable({
             <div className='text-center'>Uncategorized</div>
           )}
           <div className='flex flex-row gap-1'>
-            {x.getValue()?.map(category => (
-              <CategoryLabel key={category.categoryId} category={category.category} />
-            ))}
+            {
+              sortCategories((x.getValue() ?? []).map(x => x.category)).map(category => (
+                <CategoryLabel key={category.id} category={category} />
+              ))
+            }
           </div>
         </div>
       ),

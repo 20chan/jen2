@@ -4,12 +4,20 @@ export const presetColors = [
     color: '#e06c75',
   },
   {
-    title: 'green',
-    color: '#98c379',
+    title: 'orange',
+    color: '#f09862',
   },
   {
     title: 'yellow',
     color: '#e5c07b',
+  },
+  {
+    title: 'green',
+    color: '#98c379',
+  },
+  {
+    title: 'cyan',
+    color: '#56b6c2',
   },
   {
     title: 'blue',
@@ -20,15 +28,11 @@ export const presetColors = [
     color: '#c678dd',
   },
   {
-    title: 'cyan',
-    color: '#56b6c2',
+    title: 'purple',
+    color: '#e06cdb',
   },
   {
     title: 'white',
     color: '#dcdfe4',
-  },
-  {
-    title: 'black',
-    color: '#282c34',
   },
 ];

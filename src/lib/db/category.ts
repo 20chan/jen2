@@ -103,6 +103,7 @@ export const updateCategory = async (category: Omit<CategoryWrapped, 'archived'>
     name: category.name,
     color: category.color,
     label: category.label,
+    tag: category.tag,
     rulesSerialized: JSON.stringify(convertCategoryRulesToRawCategoryRules(category.rules)),
   };
 

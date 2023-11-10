@@ -6,6 +6,7 @@ export type CategoryWrapped = {
   color: string;
   label: string;
   rules: CategoryRules;
+  tag: boolean;
 }
 
 export type CategoryRulePair = {

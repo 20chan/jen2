@@ -1,5 +1,5 @@
 import { CreateOrEditCategoryForm } from './CreateOrEditCategoryForm';
-import { CategoryWrapped } from '@/lib/utils';
+import { CategoryWrapped, sortCategories } from '@/lib/utils';
 import { TransactionListPageContext } from '../TransactionListPageContext';
 import { CategoryItem } from './CategoryItem';
 import { CategoryParams } from '@/lib/params';
@@ -14,7 +14,7 @@ export function CategoryList({
   categories,
   context,
 }: CategoryListProps) {
-  const categorySorted = [...categories].sort((a, b) => a.name.localeCompare(b.name));
+  const categorySorted = sortCategories(categories);
   const categoryForEdit = categories.find(category => category.id === context.categoryParams.edit);
 
   return (

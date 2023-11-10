@@ -31,6 +31,7 @@ model Category {
   rulesSerialized String
 
   archived Boolean @default(false)
+  tag Boolean @default(true)
 }
 
 model CategoriesOnTransaction {
