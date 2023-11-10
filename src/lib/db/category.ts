@@ -83,17 +83,6 @@ export const assignCategories = async (categoryId: number, transactionId: number
   });
 };
 
-export const unassignCategories = async (categoryId: number, transactionId: number) => {
-  return await client.categoriesOnTransaction.delete({
-    where: {
-      transactionId_categoryId: {
-        transactionId,
-        categoryId,
-      },
-    },
-  });
-};
-
 export const createCategory = async (category: Omit<CategoryWrapped, 'id' | 'archived'>) => {
   const data = {
     name: category.name,
