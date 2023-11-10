@@ -58,7 +58,7 @@ export default function DashboardLayout({
         </div>
       </div>
 
-      <div className='min-h-screen p-12'>
+      <div className='min-h-screen py-12 pl-12'>
         {children}
       </div>
     </main>

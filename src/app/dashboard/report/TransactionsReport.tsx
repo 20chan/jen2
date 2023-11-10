@@ -37,7 +37,7 @@ export function TransactionsReport({
     const entries = Object.values(record);
     const sorted = R.sortBy(
       entries,
-      ({ category, amount }) => amount,
+      ({ category, amount }) => -Math.abs(amount),
     );
 
     return {

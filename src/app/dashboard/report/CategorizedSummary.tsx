@@ -4,7 +4,7 @@ import { CategoryLabel } from '../transaction/CategoryLabel';
 interface CategorizedSummaryProps {
   total: number;
   uncategorized: number;
-  prefix: string;
+  prefix: '수입' | '지출';
   categories: Array<{
     category: Category;
     amount: number;
@@ -25,7 +25,7 @@ export function CategorizedSummary({
   return (
     <div className='w-48 flex flex-col'>
       <Row left={`총 ${prefix}`} right={
-        <span className='text-half-red'>{total.toLocaleString()}</span>
+        <span className={prefix === '지출' ? 'text-half-red' : 'text-half-green'}>{total.toLocaleString()}</span>
       } />
       {
         categories.map(({ category, amount }) => (
