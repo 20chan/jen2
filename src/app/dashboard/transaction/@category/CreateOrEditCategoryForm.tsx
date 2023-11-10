@@ -54,6 +54,7 @@ export function CreateOrEditCategoryForm({ category }: CreateOrEditCategoryFormP
       });
     }
 
+    setInput(defaultValue);
     router.refresh();
   };
 

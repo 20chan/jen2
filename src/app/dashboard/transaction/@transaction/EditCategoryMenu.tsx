@@ -3,6 +3,7 @@
 import { TransactionWithCategories } from '@/lib/db/transaction';
 import { CategoryWrapped } from '@/lib/utils';
 import { CategoryLabel } from '../CategoryLabel';
+import { useRouter } from 'next/navigation';
 
 export function EditCategoryMenu({
   transaction,
@@ -19,6 +20,8 @@ export function EditCategoryMenu({
   top: number;
   left: number;
 }) {
+  const router = useRouter();
+
   async function handleAddCategory(category: CategoryWrapped) {
     const res = await fetch('/api/categorize', {
       method: 'POST',
@@ -27,6 +30,7 @@ export function EditCategoryMenu({
         categoryId: category.id,
       }),
     });
+    router.refresh();
   }
 
   async function handleRemoveCategory(category: CategoryWrapped) {
@@ -37,6 +41,7 @@ export function EditCategoryMenu({
         categoryId: category.id,
       }),
     });
+    router.refresh();
   }
 
   return (

@@ -81,6 +81,9 @@ export function TransactionsReport({
           </div>
 
           <div className='w-48'>
+            <div>
+              총 수입: <span className='text-half-blue'>{totalIncoming.toLocaleString()}</span>
+            </div>
             {
               incomingsWithCategories.map(([categoryId, { category, amount }]) => (
                 <div key={categoryId}>
@@ -88,9 +91,6 @@ export function TransactionsReport({
                 </div>
               ))
             }
-            <div>
-              총 수입: <span className='text-half-blue'>{totalIncoming.toLocaleString()}</span>
-            </div>
             <div>
               기타 수입: {incomingUncategorized.toLocaleString()}
             </div>

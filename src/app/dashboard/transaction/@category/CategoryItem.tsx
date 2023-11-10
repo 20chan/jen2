@@ -6,6 +6,7 @@ import { CategoryLabel } from '../CategoryLabel';
 import Link from 'next/link';
 import { CategoryParams } from '@/lib/params';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface CategoryItemProps {
   category: CategoryWrapped;
@@ -18,6 +19,8 @@ export function CategoryItem({
 }: CategoryItemProps) {
   const [folded, setFolded] = useState(true);
 
+  const router = useRouter();
+
   const fetchApplyScanned = async () => {
     await fetch('/api/categorize/apply', {
       method: 'POST',
@@ -25,6 +28,8 @@ export function CategoryItem({
         categoryId: category.id,
       }),
     });
+
+    router.refresh();
   }
 
   return (
