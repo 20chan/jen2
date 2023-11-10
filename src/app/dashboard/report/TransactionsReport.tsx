@@ -33,15 +33,15 @@ export function TransactionsReport({
       })),
     );
 
-    const entries = Object.entries(record);
+    const entries = Object.values(record);
     const sorted = R.sortBy(
       entries,
-      ([categoryId, { category, amount }]) => amount,
+      ({ category, amount }) => amount,
     );
 
     return {
-      categories: sorted.filter(x => !x[1].category.tag),
-      tags: sorted.filter(x => x[1].category.tag),
+      categories: sorted.filter(x => !x.category.tag),
+      tags: sorted.filter(x => x.category.tag),
     };
   };
 
@@ -65,7 +65,7 @@ export function TransactionsReport({
       <div>
         <TransactionsReportCalendar transactions={transactions} />
       </div>
-      <div className='ml-2'>
+      <div className='ml-4'>
         <div className='h-10'>
           <h2 className='text-3xl'>
             {month}
@@ -77,8 +77,8 @@ export function TransactionsReport({
               총 지출: <span className='text-half-red'>{totalOutgoing.toLocaleString()}</span>
             </div>
             {
-              outgoingCategories.map(([categoryId, { category, amount }]) => (
-                <div key={categoryId}>
+              outgoingCategories.map(({ category, amount }) => (
+                <div key={category.id}>
                   <CategoryLabel category={category} /> {amount.toLocaleString()}
                 </div>
               ))
@@ -94,8 +94,8 @@ export function TransactionsReport({
               총 수입: <span className='text-half-blue'>{totalIncoming.toLocaleString()}</span>
             </div>
             {
-              incomingCategories.map(([categoryId, { category, amount }]) => (
-                <div key={categoryId}>
+              incomingCategories.map(({ category, amount }) => (
+                <div key={category.id}>
                   <CategoryLabel category={category} /> {amount.toLocaleString()}
                 </div>
               ))
