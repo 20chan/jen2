@@ -11,6 +11,7 @@ async function POST(request: Request) {
   const added = await assignCategories({
     transactionId: input.transactionId,
     categoryIds: input.categoryIdsAdded,
+    manuallyAssigned: true,
   });
 
   const removed = await unassignCategories({

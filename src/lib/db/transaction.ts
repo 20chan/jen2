@@ -32,3 +32,14 @@ export const fetchTransactionsWithCategories = async (options?: FetchOptions) =>
 
   return transactions;
 };
+
+export const updateTransaction = async (transaction: Transaction) => {
+  return await client.transaction.update({
+    where: {
+      id: transaction.id,
+    },
+    data: {
+      memo: transaction.memo,
+    },
+  });
+};

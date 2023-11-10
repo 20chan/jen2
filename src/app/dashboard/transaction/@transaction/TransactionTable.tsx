@@ -4,7 +4,7 @@ import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '
 import classNames from 'classnames';
 import { CategoryWrapped, checkRules, formatDate, lerpAmount } from '@/lib/utils';
 import { TransactionWithCategories } from '@/lib/db/transaction';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EditCategoryMenu } from './EditCategoryMenu';
 import { CategoryLabel } from '../CategoryLabel';
 import { CategoryParams } from '@/lib/params';
@@ -36,10 +36,19 @@ export function TransactionTable({
     }
   }
 
+  const lazyUpdate = async (transaction: TransactionWithCategories) => {
+    const resp = await fetch('/api/transaction', {
+      method: 'PUT',
+      body: JSON.stringify(transaction),
+    });
+  }
+
   const columnHelper = createColumnHelper<TransactionWithCategories>();
   const columns = [
     columnHelper.accessor('date', {
-      cell: x => formatDate(x.getValue()),
+      cell: x => <div className='w-32'>
+        {formatDate(x.getValue())}
+      </div>,
     }),
     columnHelper.accessor('kind', {
       cell: x => <div className='text-sm'>{x.getValue()}</div>
@@ -62,18 +71,45 @@ export function TransactionTable({
       ),
     }),
     columnHelper.accessor('content', {
-      cell: x => <div className='text-sm'>{x.getValue()}</div>
+      cell: x => <div className='text-sm w-32 truncate hover:overflow-visible'>{x.getValue()}</div>
+    }),
+    columnHelper.accessor('memo', {
+      cell: x => {
+        const initialValue = x.getValue();
+        const [memo, setMemo] = useState(initialValue);
+        useEffect(() => {
+          setMemo(x.getValue())
+        }, [initialValue]);
+
+        return (
+          <input type='text' value={memo} onChange={e => setMemo(e.target.value)} onBlur={e => {
+            if (memo !== initialValue) {
+              lazyUpdate({ ...x.row.original, memo });
+            }
+          }}
+            spellCheck={false}
+            className='w-32 text-sm focus:outline-none bg-transparent text-half-white/80'
+          />
+        )
+      }
     }),
     columnHelper.accessor('amount', {
       meta: {
         align: 'right',
       },
-      cell: x => <div style={{ color: lerpAmount(-30000, 100000, x.getValue()) }}>{x.getValue()}</div>,
+      cell: x => <div style={{ color: lerpAmount(-30000, 100000, x.getValue()) }}>
+        <div className='w-16'>
+          {x.getValue()}
+        </div>
+      </div>,
     }),
     columnHelper.accessor('balance', {
       meta: {
         align: 'right',
       },
+      cell: x => <div className='w-20'>
+        {x.getValue()}
+      </div>,
     }),
   ];
 
@@ -92,7 +128,7 @@ export function TransactionTable({
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
-                <th key={header.id} className='px-6 py-2'>
+                <th key={header.id} className='py-2'>
                   {flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
               ))}
@@ -108,7 +144,7 @@ export function TransactionTable({
                 'hover:bg-half-dark-yellow/60': scanMatch,
               })}>
                 {row.getVisibleCells().map(cell => (
-                  <td key={cell.id} className={classNames('px-2 pt-1 pb-0.5 align-middle', {
+                  <td key={cell.id} className={classNames('px-1.5 pt-1 pb-0.5 align-middle', {
                     'text-right': (cell.column.columnDef.meta as any)?.align === 'right',
                   })}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
