@@ -2,7 +2,7 @@
 
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { CategoryWrapped, checkRules, formatDate, lerpAmount, sortCategories } from '@/lib/utils';
+import { CategoryWrapped, checkRules, formatDate, formatDateKr, lerpAmount, sortCategories } from '@/lib/utils';
 import { TransactionWithCategories } from '@/lib/db/transaction';
 import { useEffect, useState } from 'react';
 import { EditCategoryMenu } from './EditCategoryMenu';
@@ -47,30 +47,36 @@ export function TransactionTable({
   const columns = [
     columnHelper.accessor('date', {
       cell: x => <div className='w-32'>
-        {formatDate(x.getValue())}
+        {formatDateKr(x.getValue())}
       </div>,
     }),
     columnHelper.accessor('kind', {
-      cell: x => <div className='text-sm'>{x.getValue()}</div>
+      cell: x => <div className='text-sm w-28'>{x.getValue()}</div>
     }),
     columnHelper.accessor('categories', {
       header: 'categories',
-      cell: x => (
-        <div onClick={handleEditMenu(x.row.original)} className={classNames('text-sm cursor-pointer', {
-          'bg-half-dark-red/10': x.getValue()?.length === 0,
-        })}>
-          {x.getValue()?.length === 0 && (
-            <div className='text-center'>Uncategorized</div>
-          )}
-          <div className='flex flex-row gap-1'>
-            {
-              sortCategories((x.getValue() ?? []).map(x => x.category)).map(category => (
-                <CategoryLabel key={category.id} category={category} />
-              ))
-            }
+      cell: x => {
+        const categories = x.getValue() ?? [];
+        const categoryNotExists = categories.filter(y => !y.category.tag).length === 0;
+        return (
+          <div onClick={handleEditMenu(x.row.original)} className={classNames('text-sm cursor-pointer', {
+            'bg-half-dark-red/10': categoryNotExists,
+          })}>
+            <div className='flex flex-row gap-1 truncate overflow-clip'>
+              {
+                categoryNotExists && (
+                  <div className='text-center flex-1'>Uncategorized</div>
+                )
+              }
+              {
+                sortCategories(categories.map(x => x.category)).map(category => (
+                  <CategoryLabel key={category.id} category={category} />
+                ))
+              }
+            </div>
           </div>
-        </div>
-      ),
+        );
+      },
     }),
     columnHelper.accessor('content', {
       cell: x => <div className='text-sm w-32 truncate hover:overflow-visible'>{x.getValue()}</div>
@@ -90,7 +96,7 @@ export function TransactionTable({
             }
           }}
             spellCheck={false}
-            className='w-32 text-sm focus:outline-none bg-transparent text-half-white/80'
+            className='w-40 text-sm focus:outline-none bg-transparent text-half-white/80'
           />
         )
       }

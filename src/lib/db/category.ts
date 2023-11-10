@@ -89,6 +89,7 @@ export const createCategory = async (category: Omit<CategoryWrapped, 'id' | 'arc
     color: category.color,
     label: category.label,
     rulesSerialized: JSON.stringify(convertCategoryRulesToRawCategoryRules(category.rules)),
+    tag: category.tag,
     archived: false,
   };
 
