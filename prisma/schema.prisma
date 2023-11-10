@@ -36,7 +36,7 @@ model Category {
 
 model CategoriesOnTransaction {
   transactionId Int
-  transaction Transaction @relation(fields: [transactionId], references: [id])
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
   categoryId Int
   category Category @relation(fields: [categoryId], references: [id])
   assignedAt DateTime @default(now())

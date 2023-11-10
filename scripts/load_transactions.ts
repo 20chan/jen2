@@ -1,4 +1,4 @@
-import { loadFromDirectory } from '@/lib/load_transaction';
+import { loadFromDirectory } from '../src/lib/load_transaction';
 
 async function main() {
   const { existed, created } = await loadFromDirectory('banks');
