@@ -59,30 +59,6 @@ export const scanAndAssignCategories = async (categoryId: number) => {
   });
 };
 
-export const assignCategories = async (categoryId: number, transactionId: number, manuallyAssigned: boolean) => {
-  return await client.category.update({
-    where: {
-      id: categoryId,
-    },
-    data: {
-      Transaction: {
-        connectOrCreate: {
-          create: {
-            manuallyAssigned,
-            transactionId,
-          },
-          where: {
-            transactionId_categoryId: {
-              transactionId,
-              categoryId,
-            },
-          },
-        },
-      },
-    },
-  });
-};
-
 export const createCategory = async (category: Omit<CategoryWrapped, 'id' | 'archived'>) => {
   const data = {
     name: category.name,

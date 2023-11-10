@@ -7,6 +7,7 @@ export const assignCategory = async (options: { transactionId: number, categoryI
     data: {
       transactionId,
       categoryId,
+      manuallyAssigned: true,
     },
   });
 };

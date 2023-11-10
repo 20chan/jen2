@@ -1,10 +1,13 @@
-import { assignCategories, unassignCategories } from '@/lib/db/category';
+import { assignCategory, unassignCategory } from '@/lib/db/categorize';
 import { revalidateTag } from 'next/cache';
 
 async function POST(request: Request) {
-  const input = await request.json() as { categoryId: number, transactionId: number };
+  const { categoryId, transactionId } = await request.json() as { categoryId: number, transactionId: number };
 
-  const resp = await assignCategories(input.categoryId, input.transactionId, true);
+  const resp = await assignCategory({
+    categoryId,
+    transactionId,
+  });
 
   revalidateTag('categories');
 
@@ -15,9 +18,12 @@ async function POST(request: Request) {
 }
 
 async function DELETE(request: Request) {
-  const input = await request.json() as { categoryId: number, transactionId: number };
+  const { categoryId, transactionId } = await request.json() as { categoryId: number, transactionId: number };
 
-  const resp = await unassignCategories(input.categoryId, input.transactionId);
+  const resp = await unassignCategory({
+    categoryId,
+    transactionId,
+  });
 
   revalidateTag('categories');
 
