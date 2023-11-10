@@ -9,6 +9,7 @@ import { EditCategoryMenu } from './EditCategoryMenu';
 import { CategoryLabel } from '../CategoryLabel';
 import { CategoryParams } from '@/lib/params';
 import { TransactionListPageContext } from '../TransactionListPageContext';
+import { TransactionMemo } from './TransactionMemo';
 
 interface TransactionTableProps {
   transactions: TransactionWithCategories[];
@@ -84,21 +85,10 @@ export function TransactionTable({
     columnHelper.accessor('memo', {
       cell: x => {
         const initialValue = x.getValue();
-        const [memo, setMemo] = useState(initialValue);
-        useEffect(() => {
-          setMemo(x.getValue())
-        }, [initialValue]);
 
         return (
-          <input type='text' value={memo} onChange={e => setMemo(e.target.value)} onBlur={e => {
-            if (memo !== initialValue) {
-              lazyUpdate({ ...x.row.original, memo });
-            }
-          }}
-            spellCheck={false}
-            className='w-40 text-sm focus:outline-none bg-transparent text-half-white/80'
-          />
-        )
+          <TransactionMemo memo={initialValue} update={memo => lazyUpdate({ ...x.row.original, memo })} />
+        );
       }
     }),
     columnHelper.accessor('amount', {
