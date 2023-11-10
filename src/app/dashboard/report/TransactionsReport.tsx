@@ -19,25 +19,34 @@ export function TransactionsReport({
 
   const month = moment(transactions[0].date).format('YYYY-MM');
 
-  const groupByCategory = (xs: TransactionWithCategories[]) => R.pipe(
-    xs,
-    R.flatMap(x => x.categories.map(y => ({
-      category: y.category,
-      amount: x.amount,
-    }))),
-    R.groupBy(x => x.category.id),
-    R.mapValues(x => ({
-      category: x[0].category,
-      amount: R.sumBy(x, y => y.amount)
-    })),
-  );
+  const groupByCategory = (xs: TransactionWithCategories[]) => {
+    const record = R.pipe(
+      xs,
+      R.flatMap(x => x.categories.map(y => ({
+        category: y.category,
+        amount: x.amount,
+      }))),
+      R.groupBy(x => x.category.id),
+      R.mapValues(x => ({
+        category: x[0].category,
+        amount: R.sumBy(x, y => y.amount)
+      })),
+    );
 
-  const incomingsWithCategories = Object.entries(groupByCategory(incomings)).sort((a, b) => {
-    return b[1].amount - a[1].amount;
-  });
-  const outgoingsWithCategories = Object.entries(groupByCategory(outgoings)).sort((a, b) => {
-    return a[1].amount - b[1].amount;
-  });
+    const entries = Object.entries(record);
+    const sorted = R.sortBy(
+      entries,
+      ([categoryId, { category, amount }]) => amount,
+    );
+
+    return {
+      categories: sorted.filter(x => !x[1].category.tag),
+      tags: sorted.filter(x => x[1].category.tag),
+    };
+  };
+
+  const { categories: incomingCategories, tags: incomingTags } = groupByCategory(incomings);
+  const { categories: outgoingCategories, tags: outgoingTags } = groupByCategory(outgoings);
 
   const incomingUncategorized = R.pipe(
     incomings,
@@ -68,7 +77,7 @@ export function TransactionsReport({
               총 지출: <span className='text-half-red'>{totalOutgoing.toLocaleString()}</span>
             </div>
             {
-              outgoingsWithCategories.map(([categoryId, { category, amount }]) => (
+              outgoingCategories.map(([categoryId, { category, amount }]) => (
                 <div key={categoryId}>
                   <CategoryLabel category={category} /> {amount.toLocaleString()}
                 </div>
@@ -85,7 +94,7 @@ export function TransactionsReport({
               총 수입: <span className='text-half-blue'>{totalIncoming.toLocaleString()}</span>
             </div>
             {
-              incomingsWithCategories.map(([categoryId, { category, amount }]) => (
+              incomingCategories.map(([categoryId, { category, amount }]) => (
                 <div key={categoryId}>
                   <CategoryLabel category={category} /> {amount.toLocaleString()}
                 </div>
