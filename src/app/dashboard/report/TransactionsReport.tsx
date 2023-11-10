@@ -3,6 +3,7 @@ import { TransactionsReportCalendar } from './TransactionsReportCalendar';
 import { CategoryWrapped, moment } from '@/lib/utils';
 import { TransactionWithCategories } from '@/lib/db/transaction';
 import { CategoryLabel } from '../transaction/CategoryLabel';
+import { CategorizedSummary } from './CategorizedSummary';
 
 export function TransactionsReport({
   transactions,
@@ -73,36 +74,23 @@ export function TransactionsReport({
         </div>
         <div className='flex flex-row'>
           <div className='w-48'>
-            <div>
-              총 지출: <span className='text-half-red'>{totalOutgoing.toLocaleString()}</span>
-            </div>
-            {
-              outgoingCategories.map(({ category, amount }) => (
-                <div key={category.id}>
-                  <CategoryLabel category={category} /> {amount.toLocaleString()}
-                </div>
-              ))
-            }
-
-            <div>
-              기타 지출: {outgoingUncategorized.toLocaleString()}
-            </div>
+            <CategorizedSummary
+              total={totalOutgoing}
+              uncategorized={outgoingUncategorized}
+              prefix='지출'
+              categories={outgoingCategories}
+              tags={outgoingTags}
+            />
           </div>
 
           <div className='w-48'>
-            <div>
-              총 수입: <span className='text-half-blue'>{totalIncoming.toLocaleString()}</span>
-            </div>
-            {
-              incomingCategories.map(({ category, amount }) => (
-                <div key={category.id}>
-                  <CategoryLabel category={category} /> {amount.toLocaleString()}
-                </div>
-              ))
-            }
-            <div>
-              기타 수입: {incomingUncategorized.toLocaleString()}
-            </div>
+            <CategorizedSummary
+              total={totalIncoming}
+              uncategorized={incomingUncategorized}
+              prefix='수입'
+              categories={incomingCategories}
+              tags={incomingTags}
+            />
           </div>
         </div>
 
