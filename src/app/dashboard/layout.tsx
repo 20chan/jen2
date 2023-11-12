@@ -1,3 +1,4 @@
+import { AuthProxy } from '@/components/AuthProxy';
 import Link from 'next/link';
 
 const tabs = [
@@ -58,9 +59,11 @@ export default function DashboardLayout({
         </div>
       </div>
 
-      <div className='min-h-screen py-12 pl-12'>
-        {children}
-      </div>
+      <AuthProxy>
+        <div className='min-h-screen py-12 pl-12'>
+          {children}
+        </div>
+      </AuthProxy>
     </main>
   );
 }

@@ -1,5 +1,3 @@
-import { AuthProxy } from '@/components/AuthProxy';
-
 export default function TransactionLayout({
   transaction,
   category,
@@ -9,11 +7,9 @@ export default function TransactionLayout({
 }) {
 
   return (
-    <AuthProxy>
-      <div className='flex flex-row'>
-        {transaction}
-        {category}
-      </div>
-    </AuthProxy>
+    <div className='flex flex-row'>
+      {transaction}
+      {category}
+    </div>
   )
 }
