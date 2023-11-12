@@ -1,3 +1,4 @@
+import * as R from 'remeda';
 import { Category } from '@prisma/client';
 import { CategoryLabel } from '../transaction/CategoryLabel';
 
@@ -9,10 +10,11 @@ interface CategorizedSummaryProps {
     category: Category;
     amount: number;
   }>;
-  tags: Array<{
+  tags?: Array<{
     category: Category;
     amount: number;
   }>;
+  max?: number;
 }
 
 export function CategorizedSummary({
@@ -21,22 +23,54 @@ export function CategorizedSummary({
   prefix,
   categories,
   tags,
+  max
 }: CategorizedSummaryProps) {
+  const leftOvers = categories.slice(max ?? categories.length - 1);
+  const leftOversSum = R.sumBy(leftOvers, x => x.amount);
+
   return (
-    <div className='w-48 flex flex-col'>
+    <div>
       <Row left={`총 ${prefix}`} right={
         <span className={prefix === '지출' ? 'text-half-red' : 'text-half-green'}>{total.toLocaleString()}</span>
       } />
-      {
-        categories.map(({ category, amount }) => (
-          <Row
-            key={category.id}
-            left={<CategoryLabel category={category} />}
-            right={amount.toLocaleString()}
-          />
-        ))
-      }
-      <Row left='기타' right={uncategorized.toLocaleString()} />
+      <div className='flex flex-row'>
+        <div className='w-48 flex flex-col'>
+          {
+            categories.slice(0, max ?? categories.length - 1).map(({ category, amount }) => (
+              <Row
+                key={category.id}
+                left={<CategoryLabel category={category} />}
+                right={amount.toLocaleString()}
+              />
+            ))
+          }
+          {
+            leftOversSum > 0 && (
+              <Row left='기타' right={leftOversSum.toLocaleString()} />
+            )
+          }
+          {
+            uncategorized > 0 && (
+              <Row left={<span className='text-sm'>UNCATEGORIZED</span>} right={uncategorized.toLocaleString()} />
+            )
+          }
+        </div>
+        {
+          tags && (
+            <div className='w-48 flex flex-col'>
+              {
+                tags.map(({ category, amount }) => (
+                  <Row
+                    key={category.id}
+                    left={<CategoryLabel category={category} />}
+                    right={amount.toLocaleString()}
+                  />
+                ))
+              }
+            </div>
+          )
+        }
+      </div>
     </div>
   )
 }

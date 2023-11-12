@@ -73,13 +73,14 @@ export function TransactionsReport({
           </h2>
         </div>
         <div className='flex flex-row'>
-          <div className='w-48'>
+          <div className='w-96'>
             <CategorizedSummary
               total={totalOutgoing}
               uncategorized={outgoingUncategorized}
               prefix='지출'
               categories={outgoingCategories}
               tags={outgoingTags}
+              max={15}
             />
           </div>
 
@@ -89,7 +90,7 @@ export function TransactionsReport({
               uncategorized={incomingUncategorized}
               prefix='수입'
               categories={incomingCategories}
-              tags={incomingTags}
+              max={15}
             />
           </div>
         </div>
