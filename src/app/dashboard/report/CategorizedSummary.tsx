@@ -30,9 +30,11 @@ export function CategorizedSummary({
 
   return (
     <div>
-      <Row left={`총 ${prefix}`} right={
-        <span className={prefix === '지출' ? 'text-half-red' : 'text-half-green'}>{total.toLocaleString()}</span>
-      } />
+      <div className='mb-2 border-b border-b-half-dark-white/70'>
+        <Row left={`총 ${prefix}`} right={
+          <span className={prefix === '지출' ? 'text-half-red' : 'text-half-green'}>{total.toLocaleString()}</span>
+        } />
+      </div>
       <div className='flex flex-row'>
         <div className='w-48 flex flex-col'>
           {

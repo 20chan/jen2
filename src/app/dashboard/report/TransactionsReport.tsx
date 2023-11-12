@@ -72,7 +72,7 @@ export function TransactionsReport({
             {month}
           </h2>
         </div>
-        <div className='flex flex-row'>
+        <div className='flex flex-row gap-2'>
           <div className='w-96'>
             <CategorizedSummary
               total={totalOutgoing}
