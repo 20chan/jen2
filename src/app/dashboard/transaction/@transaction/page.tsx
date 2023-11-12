@@ -6,7 +6,7 @@ import { CategoryParams } from '@/lib/params';
 import { PaginationParams } from '@/lib/params/PaginationParams';
 import Link from 'next/link';
 
-export const preload = async (page: number) => {
+const fetchData = async (page: number) => {
   const transactions = await fetchTransactionsWithCategories({
     skip: (page - 1) * 100,
     take: 100,
@@ -16,6 +16,10 @@ export const preload = async (page: number) => {
     transactions,
     categories,
   };
+};
+
+export const preload = (page: number) => {
+  void fetchData(page);
 }
 
 export default async function TransactionListPage(props: NextProps) {
@@ -25,7 +29,7 @@ export default async function TransactionListPage(props: NextProps) {
     paginationParams: PaginationParams.parse(props),
   };
 
-  const { transactions, categories } = await preload(context.paginationParams.page);
+  const { transactions, categories } = await fetchData(context.paginationParams.page);
 
   return (
     <div>

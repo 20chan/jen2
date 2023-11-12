@@ -5,12 +5,22 @@ import { TransactionsReport } from './TransactionsReport';
 import { fetchTransactionsWithCategories } from '@/lib/db/transaction';
 import { fetchCategoriesWrapped } from '@/lib/db/category';
 
+const fetchData = async () => {
+  return {
+    transactions: await fetchTransactionsWithCategories(),
+    categories: await fetchCategoriesWrapped(),
+  }
+};
+
+export const preload = () => {
+  void fetchData();
+};
+
 type MonthlyReportProps = NextProps & {
 };
 
 export default async function MonthlyReportPage(props: MonthlyReportProps) {
-  const transactions = await fetchTransactionsWithCategories();
-  const categories = await fetchCategoriesWrapped();
+  const { transactions, categories } = await fetchData();
 
   const months = R.pipe(
     transactions,
