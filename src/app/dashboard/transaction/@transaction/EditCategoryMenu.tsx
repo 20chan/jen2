@@ -27,6 +27,7 @@ export function EditCategoryMenu({
 
   useEffect(() => {
     setActiveIds(transaction.categories.map(x => x.categoryId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transaction.id, enabled]);
 
   async function submitChanges() {

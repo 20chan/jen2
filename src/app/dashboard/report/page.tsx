@@ -12,7 +12,7 @@ const fetchData = async () => {
   }
 };
 
-export const preload = () => {
+export const preload = (props: MonthlyReportProps) => {
   void fetchData();
 };
 
