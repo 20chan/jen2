@@ -45,12 +45,12 @@ export function CategorizedSummary({
             ))
           }
           {
-            leftOversSum > 0 && (
+            Math.abs(leftOversSum) > 0 && (
               <Row left='기타' right={leftOversSum.toLocaleString()} />
             )
           }
           {
-            uncategorized > 0 && (
+            Math.abs(uncategorized) > 0 && (
               <Row left={<span className='text-sm'>UNCATEGORIZED</span>} right={uncategorized.toLocaleString()} />
             )
           }
