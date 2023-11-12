@@ -10,10 +10,6 @@ const fetchData = async () => {
   }
 }
 
-export const preload = (props: NextProps) => {
-  void fetchData();
-}
-
 export default async function TransactionListPage(props: NextProps) {
   const { categories } = await fetchData();
 

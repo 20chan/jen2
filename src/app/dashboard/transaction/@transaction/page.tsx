@@ -18,10 +18,6 @@ const fetchData = async (page: number) => {
   };
 };
 
-export const preload = (page: number) => {
-  void fetchData(page);
-}
-
 export default async function TransactionListPage(props: NextProps) {
   const context = {
     props,
