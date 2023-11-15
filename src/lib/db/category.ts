@@ -17,48 +17,6 @@ export const fetchCategoriesWrapped = async (): Promise<CategoryWrapped[]> => {
   }));
 };
 
-export const scanAndAssignCategories = async (categoryId: number) => {
-  const category = await client.category.findUniqueOrThrow({
-    where: {
-      id: categoryId,
-    },
-  });
-
-  const rules: CategoryRule[] = convertRawCategoryRulesToCategoryRules(JSON.parse(category.rulesSerialized));
-
-  const transactionIds: number[] = [];
-  const transactions = await client.transaction.findMany();
-  for (const transaction of transactions) {
-    if (!checkRules(rules, transaction)) {
-      continue;
-    }
-
-    transactionIds.push(transaction.id);
-  }
-
-  return await client.category.update({
-    where: {
-      id: category.id,
-    },
-    data: {
-      Transaction: {
-        connectOrCreate: transactionIds.map(transactionId => ({
-          create: {
-            manuallyAssigned: false,
-            transactionId,
-          },
-          where: {
-            transactionId_categoryId: {
-              transactionId,
-              categoryId: category.id,
-            },
-          },
-        })),
-      }
-    }
-  });
-};
-
 export const createCategory = async (category: Omit<CategoryWrapped, 'id' | 'archived'>) => {
   const data = {
     name: category.name,
@@ -119,3 +77,45 @@ export const unarchiveCategory = async (category: CategoryWrapped) => {
     },
   });
 }
+
+export const scanAndAssignCategories = async (categoryId: number) => {
+  const category = await client.category.findUniqueOrThrow({
+    where: {
+      id: categoryId,
+    },
+  });
+
+  const rules: CategoryRule[] = convertRawCategoryRulesToCategoryRules(JSON.parse(category.rulesSerialized));
+
+  const transactionIds: number[] = [];
+  const transactions = await client.transaction.findMany();
+  for (const transaction of transactions) {
+    if (!checkRules(rules, transaction)) {
+      continue;
+    }
+
+    transactionIds.push(transaction.id);
+  }
+
+  return await client.category.update({
+    where: {
+      id: category.id,
+    },
+    data: {
+      Transaction: {
+        connectOrCreate: transactionIds.map(transactionId => ({
+          create: {
+            manuallyAssigned: false,
+            transactionId,
+          },
+          where: {
+            transactionId_categoryId: {
+              transactionId,
+              categoryId: category.id,
+            },
+          },
+        })),
+      }
+    }
+  });
+};

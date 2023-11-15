@@ -14,6 +14,8 @@ export async function loadFromDirectory(path: string) {
   let existed = 0;
   let created = 0;
 
+  const creates: number[] = [];
+
   for (const file of fs.readdirSync(path)) {
     const book = await xlsx.fromFileAsync(`${path}/${file}`, { password: '001003' });
     const sheet = book.sheet(0);
@@ -45,7 +47,7 @@ export async function loadFromDirectory(path: string) {
         continue;
       }
 
-      await client.transaction.create({
+      const entity = await client.transaction.create({
         data: {
           createdAt,
           date: createdAt,
@@ -56,6 +58,8 @@ export async function loadFromDirectory(path: string) {
           memo: '',
         },
       });
+
+      creates.push(entity.id);
       created += 1;
     }
   }
@@ -63,5 +67,6 @@ export async function loadFromDirectory(path: string) {
   return {
     existed,
     created,
+    creates,
   }
 }
