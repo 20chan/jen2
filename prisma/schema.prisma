@@ -44,3 +44,13 @@ model CategoriesOnTransaction {
 
   @@id([transactionId, categoryId])
 }
+
+model Goal {
+  id Int @id @default(autoincrement())
+  order Int
+
+  // 'monthly' | 'daily'
+  type String
+  categoryMatch String
+  target Int
+}
