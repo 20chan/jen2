@@ -13,6 +13,10 @@ const tabs = [
         label: 'Reports',
         path: '/report',
       },
+      {
+        label: 'Goals',
+        path: '/goal',
+      },
     ],
   },
   {
