@@ -103,7 +103,7 @@ export function checkRuleKey(pair: CategoryRulePair, transaction: Transaction): 
   } else if (key === 'amount') {
     return transaction.amount.toString() === value;
   } else {
-    const match = transaction[key as keyof Transaction].toString().match(value);
+    const match = transaction[key as keyof Transaction]!.toString().match(value);
     return match !== null;
   }
 }
