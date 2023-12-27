@@ -6,12 +6,13 @@ import { CategoryLabel } from '../transaction/CategoryLabel';
 import { CategorizedSummary } from './CategorizedSummary';
 
 export function TransactionsReport({
-  transactions,
+  transactions: transactions0,
   categories,
 }: {
   transactions: TransactionModel[];
   categories: CategoryWrapped[];
 }) {
+  const transactions = transactions0.filter(x => x.children.length === 0);
   const incomings = transactions.filter(x => x.amount > 0);
   const outgoings = transactions.filter(x => x.amount < 0);
 
