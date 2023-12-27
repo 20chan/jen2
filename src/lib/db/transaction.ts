@@ -10,16 +10,20 @@ export type CategoriesOnTransactionWithCategory = {
   manuallyAssigned: boolean;
 }
 
-export type TransactionWithCategories = Transaction & {
+export type TransactionModel = Transaction & {
+  parent: Transaction | null;
+  children: Transaction[];
   categories: CategoriesOnTransactionWithCategory[];
 }
 
-export const fetchTransactionsWithCategories = async (options?: FetchOptions) => {
-  const transactions: TransactionWithCategories[] = await client.transaction.findMany({
+export const fetchTransactionModels = async (options?: FetchOptions) => {
+  const transactions: TransactionModel[] = await client.transaction.findMany({
     orderBy: {
       date: 'desc',
     },
     include: {
+      children: true,
+      parent: true,
       categories: {
         include: {
           category: true,
@@ -39,7 +43,34 @@ export const updateTransaction = async (transaction: Transaction) => {
       id: transaction.id,
     },
     data: {
+      amount: transaction.amount,
       memo: transaction.memo,
     },
   });
 };
+
+export const createSubTransaction = async (transaction: Transaction) => {
+  return await client.transaction.create({
+    data: {
+      date: transaction.date,
+      amount: 0,
+      balance: -1,
+      kind: 'sub',
+      content: '',
+      memo: '',
+      parent: {
+        connect: {
+          id: transaction.id,
+        },
+      },
+    },
+  });
+};
+
+export const deleteSubTransaction = async (transaction: Transaction) => {
+  return await client.transaction.delete({
+    where: {
+      id: transaction.id,
+    },
+  });
+}

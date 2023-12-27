@@ -1,5 +1,5 @@
 import * as R from 'remeda';
-import { CategoryWrapped } from '.';
+import { CategoryWrapped } from './categoryRuleHelper';
 import type { Category } from '@prisma/client';
 
 export function sortCategories<T extends CategoryWrapped | Category>(categories: T[]): T[] {

@@ -18,6 +18,10 @@ model Transaction {
   content String
   categories CategoriesOnTransaction[]
   memo String
+
+  parentId Int?
+  parent Transaction? @relation("TransactionChildren", fields: [parentId], references: [id])
+  children Transaction[] @relation("TransactionChildren")
 }
 
 model Category {

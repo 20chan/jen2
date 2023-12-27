@@ -2,12 +2,12 @@ import * as R from 'remeda';
 import { moment } from '@/lib/utils';
 import { NextProps } from '@/lib/NextProps';
 import { TransactionsReport } from './TransactionsReport';
-import { fetchTransactionsWithCategories } from '@/lib/db/transaction';
+import { fetchTransactionModels } from '@/lib/db/transaction';
 import { fetchCategoriesWrapped } from '@/lib/db/category';
 
 const fetchData = async () => {
   return {
-    transactions: await fetchTransactionsWithCategories(),
+    transactions: await fetchTransactionModels(),
     categories: await fetchCategoriesWrapped(),
   }
 };

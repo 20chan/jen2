@@ -1,5 +1,5 @@
 import { TransactionTable } from './TransactionTable';
-import { fetchTransactionsWithCategories } from '@/lib/db/transaction';
+import { fetchTransactionModels } from '@/lib/db/transaction';
 import { fetchCategoriesWrapped } from '@/lib/db/category';
 import { NextProps } from '@/lib/NextProps';
 import { CategoryParams } from '@/lib/params';
@@ -7,7 +7,7 @@ import { PaginationParams } from '@/lib/params/PaginationParams';
 import Link from 'next/link';
 
 const fetchData = async (page: number) => {
-  const transactions = await fetchTransactionsWithCategories({
+  const transactions = await fetchTransactionModels({
     skip: (page - 1) * 100,
     take: 100,
   });

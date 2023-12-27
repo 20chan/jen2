@@ -1,6 +1,6 @@
 'use client';
 
-import { TransactionWithCategories } from '@/lib/db/transaction';
+import { TransactionModel } from '@/lib/db/transaction';
 import { CategoryWrapped, sortCategories } from '@/lib/utils';
 import { CategoryLabel } from '../CategoryLabel';
 import { useRouter } from 'next/navigation';
@@ -14,7 +14,7 @@ export function EditCategoryMenu({
   top,
   left,
 }: {
-  transaction: TransactionWithCategories;
+  transaction: TransactionModel;
   categories: CategoryWrapped[];
   enabled: boolean;
   setEnabled: (enabled: boolean) => void;

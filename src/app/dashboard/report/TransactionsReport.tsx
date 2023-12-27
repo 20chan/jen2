@@ -1,7 +1,7 @@
 import * as R from 'remeda';
 import { TransactionsReportCalendar } from './TransactionsReportCalendar';
 import { CategoryWrapped, moment } from '@/lib/utils';
-import { TransactionWithCategories } from '@/lib/db/transaction';
+import { TransactionModel } from '@/lib/db/transaction';
 import { CategoryLabel } from '../transaction/CategoryLabel';
 import { CategorizedSummary } from './CategorizedSummary';
 
@@ -9,7 +9,7 @@ export function TransactionsReport({
   transactions,
   categories,
 }: {
-  transactions: TransactionWithCategories[];
+  transactions: TransactionModel[];
   categories: CategoryWrapped[];
 }) {
   const incomings = transactions.filter(x => x.amount > 0);
@@ -20,7 +20,7 @@ export function TransactionsReport({
 
   const month = moment(transactions[0].date).format('YYYY-MM');
 
-  const groupByCategory = (xs: TransactionWithCategories[]) => {
+  const groupByCategory = (xs: TransactionModel[]) => {
     const record = R.pipe(
       xs,
       R.flatMap(x => x.categories.map(y => ({
