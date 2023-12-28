@@ -1,5 +1,5 @@
 import { assignCategories, unassignCategories } from '@/lib/db/categorize';
-import { revalidateTag } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 async function POST(request: Request) {
   const input = await request.json() as {
@@ -20,6 +20,7 @@ async function POST(request: Request) {
   });
 
   revalidateTag('categories');
+  revalidatePath('/dashboard/report');
 
   return Response.json({
     ok: true,
