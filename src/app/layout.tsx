@@ -62,18 +62,27 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${monoKr.variable} ${mono.variable} font-default`}>
         <AuthProvider>
-          <div className='sticky top-0 bg-half-key p-4 py-1 flex justify-center items-stretch'>
+          <div className='sticky top-0 bg-half-key p-4 py-1 flex gap-3 justify-center items-stretch'>
             <div className='max-w-4xl mr-4'>
               <div className='text-xl font-bold'>
                 <span>Jen</span><span className='text-half-red'>2</span>
               </div>
             </div>
-            <div className='flex-1'>
-              <Link href='/dashboard'>
+            <div>
+              <Link href='/ledger'>
                 <div className='text-xl font-bold'>
-                  Dashboard
+                  Ledger
                 </div>
               </Link>
+            </div>
+            <div>
+              <Link href='/feed'>
+                <div className='text-xl font-bold'>
+                  Feed
+                </div>
+              </Link>
+            </div>
+            <div className='flex-1'>
             </div>
             <div>
               <AuthProxy fallback={<Link href='/api/auth/signin'>Login</Link>}>

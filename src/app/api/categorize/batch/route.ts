@@ -20,7 +20,7 @@ async function POST(request: Request) {
   });
 
   revalidateTag('categories');
-  revalidatePath('/dashboard/report');
+  revalidatePath('/ledger/report');
 
   return Response.json({
     ok: true,

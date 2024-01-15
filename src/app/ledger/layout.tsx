@@ -30,7 +30,7 @@ const tabs = [
   },
 ];
 
-export default function DashboardLayout({
+export default function LedgerLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -41,7 +41,7 @@ export default function DashboardLayout({
         <div className='flex flex-col px-4 py-4'>
           <div className='border-b border-b-half-dark-white mb-4'>
             <div className='text-4xl font-bold uppercase py-8 text-center'>
-              Dashboard
+              Ledger
             </div>
           </div>
           {
@@ -52,7 +52,7 @@ export default function DashboardLayout({
                 </div>
                 {
                   groups.map(({ label, path }) => (
-                    <Link key={label} href={`/dashboard/${path}`} className='ml-2 py-0.5 text-half-white/70'>
+                    <Link key={label} href={`/ledger/${path}`} className='ml-2 py-0.5 text-half-white/70'>
                       - {label}
                     </Link>
                   ))

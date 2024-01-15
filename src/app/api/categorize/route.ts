@@ -1,5 +1,5 @@
 import { assignCategory, unassignCategory } from '@/lib/db/categorize';
-import { revalidateTag } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 async function POST(request: Request) {
   const { categoryId, transactionId } = await request.json() as { categoryId: number, transactionId: number };
@@ -10,6 +10,7 @@ async function POST(request: Request) {
   });
 
   revalidateTag('categories');
+  revalidatePath('/ledger/report');
 
   return Response.json({
     ok: true,
@@ -26,6 +27,7 @@ async function DELETE(request: Request) {
   });
 
   revalidateTag('categories');
+  revalidatePath('/ledger/report');
 
   return Response.json({
     ok: true,
