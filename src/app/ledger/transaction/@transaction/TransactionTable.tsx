@@ -158,7 +158,7 @@ export function TransactionTable({
       }),
       columnHelper.accessor('content', {
         cell: x => <div className={classNames('text-sm truncate hover:overflow-visible', {
-          'w-28': simple,
+          'w-[5.5rem]': simple,
           'w-32': !simple,
         })}>
           {x.getValue()}
