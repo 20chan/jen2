@@ -26,10 +26,10 @@ export function CategoryList({
           ))
         }
 
-        <Link href={`/ledger/transaction?${CategoryParams.merge(context.props.searchParams, {
+        <Link href={`/ledger/transaction?${CategoryParams.merge({
           edit: null,
           create: context.categoryParams.create ? null : true,
-        })}`} className='w-full bg-half-dark-green/50 hover:bg-half-dark-green/70 py-0.5 text-center'>
+        }, context.props.searchParams)}`} className='w-full bg-half-dark-green/50 hover:bg-half-dark-green/70 py-0.5 text-center'>
           +
         </Link>
       </div>

@@ -13,6 +13,10 @@ export function formatDateKr(date: Date) {
   return moment(date).add(9, 'h').format('YYYY-MM-DD HH:mm');
 }
 
+export function formatDateKrSimple(date: Date) {
+  return moment(date).add(9, 'h').format('MM-DD HH:mm');
+}
+
 export function formatDateDiff(date: Date) {
   return moment(date).fromNow();
 }

@@ -5,10 +5,14 @@ import { Transaction } from '@prisma/client';
 import { formatSimpleCurrency, getDay, lerpAmount, moment } from '@/lib/utils';
 import { useCalendar } from '@h6s/calendar';
 import classNames from 'classnames';
+import Link from 'next/link';
+import { ReportParams } from '@/lib/params/ReportParams';
 
 export function TransactionsReportCalendar({
+  month,
   transactions,
 }: {
+  month: string;
   transactions: Transaction[];
 }) {
   const { headers, body, view } = useCalendar({
@@ -40,10 +44,10 @@ export function TransactionsReportCalendar({
               const isToday = moment().isSame(value, 'day');
 
               return (
-                <td key={key} className={classNames('w-20 py-2 align-top h-20 border-b border-b-half-dark-white/30', {
+                <td key={key} className={classNames('w-20 align-top h-20 border-b border-b-half-dark-white/30 hover:bg-half-dark-white/10', {
                   'bg-half-dark-white/20': isToday,
                 })}>
-                  <div>
+                  <Link href={`/ledger/report?${ReportParams.merge({ where: month, day: value.getDate() })}`} className='py-2 block w-full h-full'>
                     <div className={classNames('text-center text-lg', {
                       'text-half-white/40': !isCurrentMonth,
                     })}>
@@ -67,7 +71,7 @@ export function TransactionsReportCalendar({
                         </div>
                       )
                     }
-                  </div>
+                  </Link>
                 </td>
               )
             })}

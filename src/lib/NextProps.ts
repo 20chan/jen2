@@ -8,8 +8,7 @@ export type NextProps = {
 
 export namespace NextSearchParams {
   export const get = (searchProps: NextSearchParams, key: string): string[] | null => {
-    const keyEscaped = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-    const value = searchProps[keyEscaped];
+    const value = searchProps[key];
 
     if (value === undefined) {
       return null;
@@ -192,10 +191,10 @@ export namespace NextSearchParams {
   };
 
   export const merge = <TValue extends Record<string, ScheamValueType>>(
-    searchParams: NextSearchParams,
     params: TValue,
+    searchParams?: NextSearchParams,
   ): string => {
-    const qs = qsfy(searchParams);
+    const qs = searchParams ? qsfy(searchParams) : new URLSearchParams();
 
     for (const key in params) {
       if (qs.has(key)) {

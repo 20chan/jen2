@@ -73,10 +73,10 @@ export function CategoryItem({
           </div>
 
           <Link
-            href={`/ledger/transaction?${CategoryParams.merge(context.props.searchParams, {
+            href={`/ledger/transaction?${CategoryParams.merge({
               edit: category.id,
               create: null,
-            })}`}
+            }, context.props.searchParams)}`}
             className='block w-full text-center bg-half-dark-yellow/50 hover:bg-half-dark-yellow/70 text-sm uppercase'
           >
             edit
@@ -90,9 +90,9 @@ export function CategoryItem({
 
             ) : (
               <Link
-                href={`/ledger/transaction?${CategoryParams.merge(context.props.searchParams, {
+                href={`/ledger/transaction?${CategoryParams.merge({
                   scan: category.id,
-                })}`}
+                }, context.props.searchParams)}`}
                 className='block w-full text-center bg-half-dark-green/50 hover:bg-half-dark-green/70 text-sm uppercase'
               >
                 test

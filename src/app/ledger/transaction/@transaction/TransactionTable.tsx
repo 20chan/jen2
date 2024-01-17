@@ -1,8 +1,8 @@
 'use client';
 
-import { createColumnHelper, flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table';
+import { ColumnDef, createColumnHelper, flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from '@tanstack/react-table';
 import classNames from 'classnames';
-import { CategoryWrapped, checkRules, formatDate, formatDateKr, lerpAmount, sortCategories, transactionToModel } from '@/lib/utils';
+import { CategoryWrapped, checkRules, formatDate, formatDateKr, formatDateKrSimple, lerpAmount, sortCategories, transactionToModel } from '@/lib/utils';
 import type { TransactionModel } from '@/lib/db/transaction';
 import { useMemo, useState } from 'react';
 import { EditCategoryMenu } from './EditCategoryMenu';
@@ -15,13 +15,17 @@ import { TransactionAmount } from './TransactionAmount';
 interface TransactionTableProps {
   transactions: TransactionModel[];
   categories: CategoryWrapped[];
-  context: TransactionListPageContext;
+  context: TransactionListPageContext | null;
+  simple?: boolean;
+  readonly?: boolean;
 }
 
 export function TransactionTable({
   transactions,
   categories,
   context,
+  simple,
+  readonly,
 }: TransactionTableProps) {
   const [selectedTransaction, setSelectedTransaction] = useState<TransactionModel | null>(null);
   const [showEditMenu, setShowEditMenu] = useState(false);
@@ -77,13 +81,13 @@ export function TransactionTable({
             )
           }
           return (
-            <div className='w-32'>
-              {formatDateKr(x.getValue())}
+            <div className={simple ? 'w-[5.5rem]' : 'w-32'}>
+              {simple ? formatDateKrSimple(x.getValue()) : formatDateKr(x.getValue())}
             </div>
           );
         },
       }),
-      columnHelper.accessor('kind', {
+      (!simple) && columnHelper.accessor('kind', {
         cell: x => {
           const row = x.row.original;
           if (row.parent !== null) {
@@ -122,30 +126,45 @@ export function TransactionTable({
 
             }
           }
+          const inner = (
+            <div className='flex flex-row gap-1 truncate overflow-clip'>
+              {
+                categoryNotExists && (
+                  <div className='text-center flex-1'>Uncategorized</div>
+                )
+              }
+              {
+                sortCategories(categories.map(x => x.category)).map(category => (
+                  <CategoryLabel key={category.id} category={category} />
+                ))
+              }
+            </div>
+          );
+          if (readonly) {
+            return (
+              <div className='w-28'>
+                {inner}
+              </div>
+            );
+          }
           return (
             <div onClick={handleEditMenu(x.row.original)} className={classNames('text-sm cursor-pointer', {
               'bg-half-dark-red/10': categoryNotExists,
             })}>
-              <div className='flex flex-row gap-1 truncate overflow-clip'>
-                {
-                  categoryNotExists && (
-                    <div className='text-center flex-1'>Uncategorized</div>
-                  )
-                }
-                {
-                  sortCategories(categories.map(x => x.category)).map(category => (
-                    <CategoryLabel key={category.id} category={category} />
-                  ))
-                }
-              </div>
+              {inner}
             </div>
           );
         },
       }),
       columnHelper.accessor('content', {
-        cell: x => <div className='text-sm w-32 truncate hover:overflow-visible'>{x.getValue()}</div>
+        cell: x => <div className={classNames('text-sm truncate hover:overflow-visible', {
+          'w-28': simple,
+          'w-32': !simple,
+        })}>
+          {x.getValue()}
+        </div>
       }),
-      columnHelper.accessor('memo', {
+      (!simple) && columnHelper.accessor('memo', {
         cell: x => {
           const initialValue = x.getValue();
 
@@ -181,7 +200,7 @@ export function TransactionTable({
           );
         },
       }),
-      columnHelper.accessor('balance', {
+      (!simple) && columnHelper.accessor('balance', {
         meta: {
           align: 'right',
         },
@@ -209,6 +228,14 @@ export function TransactionTable({
             )
           );
 
+          if (readonly) {
+            return (
+              <div className='w-20'>
+                {value}
+              </div>
+            )
+          }
+
           return (
             <div className='w-20'>
               <div className='group-hover:block hidden'>
@@ -221,7 +248,7 @@ export function TransactionTable({
           );
         },
       }),
-    ];
+    ].filter(x => x !== undefined && x !== false) as ColumnDef<TransactionModel, any>[];
   }, []);
 
   const data = useMemo(() => {
@@ -239,7 +266,7 @@ export function TransactionTable({
     getExpandedRowModel: getExpandedRowModel(),
   });
 
-  const scanCategrory = categories.find(x => x.id === context.categoryParams.scan);
+  const scanCategrory = context && categories.find(x => x.id === context.categoryParams.scan);
 
   return (
     <div>
@@ -283,15 +310,19 @@ export function TransactionTable({
         </tbody>
       </table>
 
-      <div>
-        <EditCategoryMenu
-          transaction={selectedTransaction ?? transactions[0]}
-          categories={categories}
-          enabled={showEditMenu}
-          setEnabled={setShowEditMenu}
-          top={editMenuPosition.top}
-          left={editMenuPosition.left} />
-      </div>
+      {
+        !readonly && (
+          <div>
+            <EditCategoryMenu
+              transaction={selectedTransaction ?? transactions[0]}
+              categories={categories}
+              enabled={showEditMenu}
+              setEnabled={setShowEditMenu}
+              top={editMenuPosition.top}
+              left={editMenuPosition.left} />
+          </div>
+        )
+      }
     </div>
   )
 }

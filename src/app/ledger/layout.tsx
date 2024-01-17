@@ -36,7 +36,7 @@ export default function LedgerLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className='flex flex-row'>
+    <main className='flex flex-row min-w-screen'>
       <div className='basis-56 bg-half-dark-white/10'>
         <div className='flex flex-col px-4 py-4'>
           <div className='border-b border-b-half-dark-white mb-4'>
@@ -52,7 +52,7 @@ export default function LedgerLayout({
                 </div>
                 {
                   groups.map(({ label, path }) => (
-                    <Link key={label} href={`/ledger/${path}`} className='ml-2 py-0.5 text-half-white/70'>
+                    <Link key={label} href={`/ledger${path}`} className='ml-2 py-0.5 text-half-white/70'>
                       - {label}
                     </Link>
                   ))
@@ -64,7 +64,7 @@ export default function LedgerLayout({
       </div>
 
       <AuthProxy>
-        <div className='min-h-screen py-12 pl-12'>
+        <div className='min-h-screen flex-1 py-12 pl-12'>
           {children}
         </div>
       </AuthProxy>

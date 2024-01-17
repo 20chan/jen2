@@ -23,8 +23,8 @@ export namespace CategoryParams {
     return NextSearchParams.parse(props.searchParams, schema, defaultValue);
   };
 
-  export const merge = (searchParams: NextSearchParams, params: Partial<CategoryParams>): string => {
-    return NextSearchParams.merge(searchParams, params);
+  export const merge = (params: Partial<CategoryParams>, searchParams?: NextSearchParams): string => {
+    return NextSearchParams.merge(params, searchParams);
   }
 }
 

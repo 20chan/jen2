@@ -6,9 +6,11 @@ import { CategoryLabel } from '../transaction/CategoryLabel';
 import { CategorizedSummary } from './CategorizedSummary';
 
 export function TransactionsReport({
+  month,
   transactions: transactions0,
   categories,
 }: {
+  month: string;
   transactions: TransactionModel[];
   categories: CategoryWrapped[];
 }) {
@@ -18,8 +20,6 @@ export function TransactionsReport({
 
   const totalIncoming = R.sumBy(incomings, x => x.amount);
   const totalOutgoing = R.sumBy(outgoings, x => x.amount);
-
-  const month = moment(transactions[0].date).format('YYYY-MM');
 
   const groupByCategory = (xs: TransactionModel[]) => {
     const record = R.pipe(
@@ -65,7 +65,7 @@ export function TransactionsReport({
   return (
     <div className='flex flex-row'>
       <div>
-        <TransactionsReportCalendar transactions={transactions} />
+        <TransactionsReportCalendar month={month} transactions={transactions} />
       </div>
       <div className='ml-4'>
         <div className='h-10'>
@@ -76,6 +76,7 @@ export function TransactionsReport({
         <div className='flex flex-row gap-2'>
           <div className='w-96'>
             <CategorizedSummary
+              month={month}
               total={totalOutgoing}
               uncategorized={outgoingUncategorized}
               prefix='지출'
@@ -87,6 +88,7 @@ export function TransactionsReport({
 
           <div className='w-48'>
             <CategorizedSummary
+              month={month}
               total={totalIncoming}
               uncategorized={incomingUncategorized}
               prefix='수입'

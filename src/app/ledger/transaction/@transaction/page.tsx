@@ -31,14 +31,14 @@ export default async function TransactionListPage(props: NextProps) {
     <div>
       <TransactionTable transactions={[...transactions].slice(0, 100)} categories={categories} context={context} />
       <div className='flex flex-row items-stretch justify-stretch'>
-        <Link href={`/ledger/transaction?${PaginationParams.merge(context.props.searchParams, {
+        <Link href={`/ledger/transaction?${PaginationParams.merge({
           page: context.paginationParams.page - 1,
-        })}`} className='flex-1 bg-half-dark-green/50 hover:bg-half-dark-green/70 py-1 text-center'>
+        }, context.props.searchParams)}`} className='flex-1 bg-half-dark-green/50 hover:bg-half-dark-green/70 py-1 text-center'>
           {'<'}
         </Link>
-        <Link href={`/ledger/transaction?${PaginationParams.merge(context.props.searchParams, {
+        <Link href={`/ledger/transaction?${PaginationParams.merge({
           page: context.paginationParams.page + 1,
-        })}`} className='flex-1 bg-half-dark-green/50 hover:bg-half-dark-green/70 py-1 text-center'>
+        }, context.props.searchParams)}`} className='flex-1 bg-half-dark-green/50 hover:bg-half-dark-green/70 py-1 text-center'>
           {'>'}
         </Link>
       </div>
