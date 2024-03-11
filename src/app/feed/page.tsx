@@ -5,12 +5,13 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { fetchHackerNews } from '@/lib/feed/hn';
 import { Suspense } from 'react';
+import { fetchGeekNews } from '@/lib/feed/gn';
 
 // TODO: use stream instead of force dynamic
 export const dynamic = 'force-dynamic';
 
 export default async function FeedPage() {
-  const fn = (x: Awaited<ReturnType<typeof fetchQuasarHotDeal>>[0]) => (
+  const fn_quasar = (x: Awaited<ReturnType<typeof fetchQuasarHotDeal>>[0]) => (
     <Link href={x.url!} className='group border-b border-b-half-dark-white/25 hover:bg-half-dark-white/10 flex flex-row'>
       <div className='w-20'>
         <img src={x.thumbnail!} className='w-20 h-20' />
@@ -43,7 +44,7 @@ export default async function FeedPage() {
     </Link>
   );
 
-  const fn_withoutImage = (x: Awaited<ReturnType<typeof fetchHackerNews>>[0]) => {
+  const fn_hn = (x: Awaited<ReturnType<typeof fetchHackerNews>>[0]) => {
     if (x.type === 'story' || x.type === 'ask') {
       return (
         <Link href={x.url} className='group border-b border-b-half-dark-white/25 hover:bg-half-dark-white/10 flex flex-row'>
@@ -70,16 +71,36 @@ export default async function FeedPage() {
     }
   }
 
+  const fn_gn = (x: Awaited<ReturnType<typeof fetchGeekNews>>[0]) => {
+    return (
+      <Link href={x.url} className='group border-b border-b-half-dark-white/25 hover:bg-half-dark-white/10 flex flex-row'>
+        <div className='flex-1 mx-1.5 mt-1.5 text-sm'>
+          <span className='mr-1.5 text-half-yellow'>
+            [{x.score}]
+          </span>
+          {x.title}
+        </div>
+
+        <Link href={x.commentUrl} className='block h-full px-2 text-half-white/50 hover:text-half-white/70 hover:font-bold'>
+          ...
+        </Link>
+      </Link>
+    )
+  }
+
   return (
     <div>
       Feed
 
-      <div className='flex flex-row'>
+      <div className='flex flex-row gap-x-4'>
         <Suspense fallback={<div>Loading...</div>}>
-          <FeedList fetcher={fetchQuasarHotDeal} fn_node={fn} count={3} />
+          <FeedList fetcher={fetchQuasarHotDeal} fn_node={fn_quasar} count={3} className='basis-[28%]' />
         </Suspense>
         <Suspense fallback={<div>Loading...</div>}>
-          <FeedList fetcher={fetchHackerNews} fn_node={fn_withoutImage} count={6} />
+          <FeedList fetcher={fetchHackerNews} fn_node={fn_hn} count={6} className='basis-[36%]' />
+        </Suspense>
+        <Suspense fallback={<div>Loading...</div>}>
+          <FeedList fetcher={fetchGeekNews} fn_node={fn_gn} count={3} className='basis-[36%]' />
         </Suspense>
       </div>
     </div>
