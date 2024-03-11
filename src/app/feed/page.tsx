@@ -61,6 +61,10 @@ export default async function FeedPage() {
             </span>
             {x.title}
           </div>
+
+          <Link href={`https://news.ycombinator.com/item?id=${x.id}`} className='block h-full px-2 text-half-white/50 hover:text-half-white/70 hover:font-bold'>
+            ...
+          </Link>
         </Link>
       )
     }
