@@ -46,13 +46,17 @@ export type HackerNewsItem = (
   | HackerNewsPoll
 )
 
-const PAGE_COUNT = 500;
+const PAGE_COUNT = 50;
 
-export async function fetchHackerNews(page: number) {
+export async function fetchHackerNews(page: number, options?: {
+  pageCount?: number;
+}) {
   const resp = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json')
   const ids = await resp.json() as number[];
 
-  const ids_page = ids.slice(page * PAGE_COUNT, (page + 1) * PAGE_COUNT);
+  const pageCount = options?.pageCount ?? PAGE_COUNT;
+
+  const ids_page = ids.slice(page * pageCount, (page + 1) * pageCount);
 
   const chunks = R.chunk(ids_page, 10);
   const results: HackerNewsItem[] = [];

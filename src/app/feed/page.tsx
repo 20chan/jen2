@@ -76,10 +76,10 @@ export default async function FeedPage() {
 
       <div className='flex flex-row'>
         <Suspense fallback={<div>Loading...</div>}>
-          <FeedList fetcher={fetchQuasarHotDeal} fn_node={fn} count={100} />
+          <FeedList fetcher={fetchQuasarHotDeal} fn_node={fn} count={3} />
         </Suspense>
         <Suspense fallback={<div>Loading...</div>}>
-          <FeedList fetcher={fetchHackerNews} fn_node={fn_withoutImage} count={300} />
+          <FeedList fetcher={fetchHackerNews} fn_node={fn_withoutImage} count={6} />
         </Suspense>
       </div>
     </div>
